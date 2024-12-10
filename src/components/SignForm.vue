@@ -1,4 +1,55 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useToastsStore } from '@/stores/toasts';
+import { signIn, signUp } from '../services/authService';
+
+interface Props {
+  signTitle: string;
+  signButtonTitle: string;
+  newAcc: boolean;
+}
+
+defineProps<Props>();
+
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const error = ref<string | null>(null);
+const signmessage = ref('');
+
+const router = useRouter();
+const route = useRoute();
+const toastsStore = useToastsStore();
+
+const signInAcc = async () => {
+  error.value = null;
+
+  if (route.path === '/sign-in') {
+    signmessage.value = 'Signing you in...';
+    const result = await signIn(email.value, password.value);
+
+    if ('failed' in result) {
+      signmessage.value = '';
+      toastsStore.addToast(result.message);
+      return;
+    }
+
+    router.push('/');
+  } else {
+    signmessage.value = 'Creating your account...';
+    const result = await signUp(email.value, password.value);
+
+    if ('failed' in result) {
+      signmessage.value = '';
+      toastsStore.addToast(result.message);
+      return;
+    }
+
+    router.push('/');
+  }
+};
+</script>
 
 <template>
   <main class="sign-form">
@@ -60,7 +111,6 @@
   font-size: 24px;
   font-weight: bold;
   color: var(--text-main-color);
-  transition: all 0.4s ease;
 }
 
 .sign-form__container {
@@ -89,12 +139,10 @@
   box-sizing: border-box;
   background-color: var(--bg-color-form);
   color: var(--text-main-color);
-  transition: all 0.4s ease;
 }
 
 .sign-form__input::placeholder {
   color: var(--text-secondary-color);
-  transition: all 0.4s ease;
 }
 
 .sign-form__button {
@@ -115,7 +163,6 @@
 
 .sign-form__other {
   color: var(--text-main-color);
-  transition: all 0.4s ease;
 }
 
 .sign-form__link {

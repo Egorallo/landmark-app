@@ -5,6 +5,7 @@ import {
   signOut as fireSignOut,
   onAuthStateChanged,
   type User,
+  type UserCredential,
 } from 'firebase/auth';
 import { ERROR_MESSAGES } from '../constants/errors';
 
@@ -36,21 +37,27 @@ export const getCurrentUser = async (): Promise<User | null> => {
   });
 };
 
-export async function signIn(email: string, password: string) {
+export async function signIn(
+  email: string,
+  password: string,
+): Promise<UserCredential | { failed: true; message: string }> {
   try {
     const userCreds = await signInWithEmailAndPassword(auth, email, password);
     return userCreds;
   } catch (error) {
-    passError(error);
+    return passError(error);
   }
 }
 
-export async function signUp(email: string, password: string) {
+export async function signUp(
+  email: string,
+  password: string,
+): Promise<UserCredential | { failed: true; message: string }> {
   try {
     const userCreds = await createUserWithEmailAndPassword(auth, email, password);
     return userCreds;
   } catch (error) {
-    passError(error);
+    return passError(error);
   }
 }
 
