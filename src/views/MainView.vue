@@ -1,7 +1,9 @@
-<template>
-  <div></div>
-</template>
+<script setup lang="ts">
+import BaseMap from '@/components/BaseMap.vue';
+</script>
 
-<script setup lang="ts"></script>
+<template>
+  <BaseMap />
+</template>
 
 <style scoped></style>
