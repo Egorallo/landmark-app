@@ -6,6 +6,9 @@ export const useToastsStore = defineStore('toasts', () => {
 
   function addToast(message: string) {
     toasts.value.push(message);
+    setTimeout(() => {
+      toasts.value.shift();
+    }, 3000);
   }
 
   return { toasts, addToast };
