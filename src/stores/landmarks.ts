@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { getCurrentUser } from '../services/authService';
 import { getLandmarks, addNewLandmark, removeLandmark } from '../services/landmarkService';
+import { useUserStore } from './user';
 
 interface Landmark {
   id: string;
@@ -13,15 +13,10 @@ interface Landmark {
 }
 
 export const useLandmarksStore = defineStore('landmarks', () => {
-  const landmarks = ref<Landmark[]>([]);
-  const userId = ref<string | null>(null);
+  const userStore = useUserStore();
+  const userId = computed(() => userStore.userId);
 
-  async function initializeUser() {
-    const user = await getCurrentUser();
-    if (user) {
-      userId.value = user.uid;
-    }
-  }
+  const landmarks = ref<Landmark[]>([]);
 
   async function fetchLandmarks() {
     if (!userId.value) {
@@ -68,8 +63,6 @@ export const useLandmarksStore = defineStore('landmarks', () => {
 
   return {
     landmarks,
-    userId,
-    initializeUser,
     fetchLandmarks,
     addLandmark,
     deleteLandmark,

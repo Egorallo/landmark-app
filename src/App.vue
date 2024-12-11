@@ -5,19 +5,19 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './services/firebaseInit';
 import ToastNotification from './components/ToastNotification.vue';
 import { useToastsStore } from './stores/toasts';
-import { useLandmarksStore } from './stores/landmarks';
+import { useUserStore } from './stores/user';
 import { storeToRefs } from 'pinia';
 
 const isLogged = ref(false);
 const toastsStore = useToastsStore();
-const landmarksStore = useLandmarksStore();
+const userStore = useUserStore();
 
 const { toasts } = storeToRefs(toastsStore);
 
 onMounted(() => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      landmarksStore.initializeUser();
+      userStore.initializeUser();
       isLogged.value = true;
     } else {
       isLogged.value = false;
