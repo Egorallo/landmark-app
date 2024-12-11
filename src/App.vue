@@ -27,6 +27,14 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="nav"></div>
   <ToastNotification :toasts="toasts"></ToastNotification>
   <RouterView />
 </template>
+
+<style scoped>
+.nav {
+  width: 100%;
+  height: 30px;
+}
+</style>

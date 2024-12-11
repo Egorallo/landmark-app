@@ -27,7 +27,7 @@ onMounted(() => {
 
 <style scoped>
 .map {
-  height: 90%;
-  width: 50%;
+  /* width: 70%; */
+  height: 100%;
 }
 </style>

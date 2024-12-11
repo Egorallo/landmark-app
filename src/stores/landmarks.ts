@@ -1,15 +1,22 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import { getLandmarks, addNewLandmark, removeLandmark } from '../services/landmarkService';
+import { ref, computed, watch } from 'vue';
+import {
+  getAllLandmarks,
+  addNewLandmark,
+  removeLandmark,
+  updLandmark,
+} from '../services/landmarkService';
 import { useUserStore } from './user';
 
 interface Landmark {
-  id: string;
+  id?: string;
   userId: string;
   userRating: number;
   name: string;
   description: string;
   rating: number;
+  long: number;
+  lat: number;
 }
 
 export const useLandmarksStore = defineStore('landmarks', () => {
@@ -22,7 +29,8 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     if (!userId.value) {
       return;
     }
-    const fetchedLandmarks = await getLandmarks(userId.value);
+    const fetchedLandmarks = await getAllLandmarks();
+    console.log('fetched from store: ', fetchedLandmarks);
     landmarks.value = fetchedLandmarks;
   }
 
@@ -43,23 +51,35 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     try {
       await removeLandmark(userId.value, landmarkId);
     } catch (_) {
-      const fetchedLandmarks = await getLandmarks(userId.value);
+      const fetchedLandmarks = await getAllLandmarks();
       landmarks.value = fetchedLandmarks;
     }
   }
 
-  function updateLandmark(landmarkId: string, updatedData: Partial<Landmark>) {
+  async function updateLandmark(landmarkId: string, updatedData: Partial<Landmark>) {
     if (!userId.value) {
       return;
     }
     landmarks.value = landmarks.value.map((landmark) =>
       landmark.id === landmarkId ? { ...landmark, ...updatedData } : landmark,
     );
+    await updLandmark(userId.value, landmarkId, updatedData);
+  }
+
+  if (userStore.userId) {
+    fetchLandmarks();
   }
 
   const landmarksByUserId = computed(() =>
     landmarks.value.filter((landmark) => landmark.userId === userId.value),
   );
+
+  watch(userId, async (newUserId) => {
+    console.log('mmmmm');
+    if (newUserId) {
+      await fetchLandmarks();
+    }
+  });
 
   return {
     landmarks,

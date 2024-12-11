@@ -1,22 +1,45 @@
-import { doc, deleteDoc, updateDoc, getDoc, getDocs, addDoc, collection } from 'firebase/firestore';
+import {
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+  getDocs,
+  addDoc,
+  collection,
+  setDoc,
+} from 'firebase/firestore';
 import { db } from './firebaseInit';
 
 interface Landmark {
-  id: string;
+  id?: string;
   userId: string;
   userRating: number;
   name: string;
   description: string;
   rating: number;
+  long: number;
+  lat: number;
 }
 
 export async function addNewLandmark(userId: string, newLandmark: Landmark) {
-  const userLandmarksRef = collection(doc(db, 'users', userId), 'landmarks');
+  const userDocRef = doc(db, 'users', userId);
+
+  await setDoc(
+    userDocRef,
+    {
+      lastAccessed: new Date().toISOString(),
+    },
+    { merge: true },
+  );
+
+  const userLandmarksRef = collection(userDocRef, 'landmarks');
   await addDoc(userLandmarksRef, {
     userId: newLandmark.userId,
     name: newLandmark.name,
     description: newLandmark.description,
     rating: newLandmark.rating,
+    long: newLandmark.long,
+    lat: newLandmark.lat,
   });
 }
 
@@ -25,7 +48,7 @@ export async function removeLandmark(userId: string, landmarkId: string) {
   await deleteDoc(landmarkDocRef);
 }
 
-export async function updateLandmark(
+export async function updLandmark(
   userId: string,
   landmarkId: string,
   updatedData: Partial<Landmark>,
@@ -42,9 +65,28 @@ export async function getLandmarkById(userId: string, landmarkId: string) {
   }
 }
 
-export async function getLandmarks(userId: string) {
-  const userLandmarksRef = collection(doc(db, 'users', userId), 'landmarks');
-  const landmarkSnapshot = await getDocs(userLandmarksRef);
-  const landmarkList = landmarkSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  return landmarkList as Landmark[];
+export async function getAllLandmarks(): Promise<Landmark[]> {
+  console.log('landmarks from all users');
+  const usersCollectionRef = collection(db, 'users');
+  const usersSnapshot = await getDocs(usersCollectionRef);
+
+  const allLandmarks: Landmark[] = [];
+  console.log(usersSnapshot.docs);
+  for (const userDoc of usersSnapshot.docs) {
+    const userId = userDoc.id;
+    const landmarksRef = collection(db, 'users', userId, 'landmarks');
+    const landmarksSnapshot = await getDocs(landmarksRef);
+    const userLandmarks = landmarksSnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          // userId,
+          ...doc.data(),
+        }) as Landmark,
+    );
+
+    allLandmarks.push(...userLandmarks);
+  }
+
+  return allLandmarks;
 }
