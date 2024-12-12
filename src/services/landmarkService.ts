@@ -19,6 +19,7 @@ interface Landmark {
   rating: number;
   long: number;
   lat: number;
+  images: string[];
 }
 
 export async function addNewLandmark(userId: string, newLandmark: Landmark) {
@@ -40,6 +41,7 @@ export async function addNewLandmark(userId: string, newLandmark: Landmark) {
     rating: newLandmark.rating,
     long: newLandmark.long,
     lat: newLandmark.lat,
+    images: newLandmark.images,
   });
 }
 
@@ -66,12 +68,10 @@ export async function getLandmarkById(userId: string, landmarkId: string) {
 }
 
 export async function getAllLandmarks(): Promise<Landmark[]> {
-  console.log('landmarks from all users');
   const usersCollectionRef = collection(db, 'users');
   const usersSnapshot = await getDocs(usersCollectionRef);
 
   const allLandmarks: Landmark[] = [];
-  console.log(usersSnapshot.docs);
   for (const userDoc of usersSnapshot.docs) {
     const userId = userDoc.id;
     const landmarksRef = collection(db, 'users', userId, 'landmarks');
@@ -80,7 +80,7 @@ export async function getAllLandmarks(): Promise<Landmark[]> {
       (doc) =>
         ({
           id: doc.id,
-          // userId,
+          userId,
           ...doc.data(),
         }) as Landmark,
     );

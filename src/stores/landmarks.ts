@@ -17,6 +17,7 @@ interface Landmark {
   rating: number;
   long: number;
   lat: number;
+  images: string[];
 }
 
 export const useLandmarksStore = defineStore('landmarks', () => {
