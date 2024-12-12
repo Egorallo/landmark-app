@@ -103,6 +103,7 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
 
 <template>
   <div class="landmarks-list">
+    <div class="landmarks-list__title">Top 10 Places</div>
     <div class="landmarks-list__container" v-if="landmarks.length">
       <LandmarksListItem
         v-for="landmark in landmarks"
@@ -122,15 +123,26 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
 </template>
 
 <style scoped>
+.landmarks-list__title {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  line-height: auto;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
 .landmarks-list {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   overflow: auto;
 }
 .landmarks-list__container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 15px;
+  row-gap: 5px;
   height: 700px;
   overflow: auto;
 }

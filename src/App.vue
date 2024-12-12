@@ -27,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="nav"></div>
+  <div class="nav">Landmarks 2025 📍</div>
   <ToastNotification :toasts="toasts"></ToastNotification>
   <RouterView />
 </template>
@@ -36,5 +36,7 @@ onMounted(() => {
 .nav {
   width: 100%;
   height: 30px;
+  font-size: 20px;
+  color: #00ffe5;
 }
 </style>

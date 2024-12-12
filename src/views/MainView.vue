@@ -16,7 +16,7 @@ import LandmarksList from '@/components/LandmarksList.vue';
   height: 100%;
   display: grid;
   column-gap: 10px;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 400px;
 }
 
 @media (max-width: 750px) {
