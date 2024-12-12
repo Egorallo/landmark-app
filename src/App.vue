@@ -7,6 +7,7 @@ import ToastNotification from './components/ToastNotification.vue';
 import { useToastsStore } from './stores/toasts';
 import { useUserStore } from './stores/user';
 import { storeToRefs } from 'pinia';
+import NavTop from './components/NavTop.vue';
 
 const isLogged = ref(false);
 const toastsStore = useToastsStore();
@@ -27,16 +28,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="nav">Landmarks 2025 📍</div>
+  <NavTop v-if="isLogged" />
   <ToastNotification :toasts="toasts"></ToastNotification>
   <RouterView />
 </template>
 
-<style scoped>
-.nav {
-  width: 100%;
-  height: 30px;
-  font-size: 20px;
-  color: #00ffe5;
-}
-</style>
+<style scoped></style>
