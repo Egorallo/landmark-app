@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import LandmarksListItem from './LandmarksListItem.vue';
 import { compressImage } from '@/utils/imageCompressor';
@@ -26,7 +26,13 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const files = ref<File[] | null>(null);
 
 const userId = userStore.userId;
+const showOnlyUserLandmarks = ref(false);
 const { landmarks, landmarksByUserId } = storeToRefs(landmarksStore);
+
+const displayedLandmarks = computed(() => {
+  console.log('accessed computed landmarks');
+  return showOnlyUserLandmarks.value ? landmarksByUserId.value : landmarks.value;
+});
 
 const newLandmark = reactive<Landmark>({
   id: '',
@@ -92,6 +98,10 @@ async function addNewLandmark(landmark: Landmark) {
   fileInput.value!.value = '';
 }
 
+watch(displayedLandmarks, (newDisplayedLandmarks) => {
+  console.log('Displayed landmarks updated:', newDisplayedLandmarks);
+});
+
 watch(landmarks, (newLandmarks) => {
   console.log('Landmarks updated:', newLandmarks);
 });
@@ -103,14 +113,24 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
 
 <template>
   <div class="landmarks-list">
-    <div class="landmarks-list__title">Top 10 Places</div>
+    <div class="landmarks-list__header">
+      <div class="landmarks-list__header__title">Top 10 Places</div>
+      <input
+        class="landmarks-list__header__checkbox"
+        type="checkbox"
+        v-model="showOnlyUserLandmarks"
+      />
+      <label class="landmarks-list__header__label">Show only my landmarks</label>
+    </div>
     <div class="landmarks-list__container" v-if="landmarks.length">
       <LandmarksListItem
-        v-for="landmark in landmarks"
+        v-for="landmark in displayedLandmarks"
         :key="landmark.id"
         :landmark="landmark"
       ></LandmarksListItem>
     </div>
+    <div v-else>No landmarks available.</div>
+
     <input type="text" v-model="newLandmark.name" placeholder="" />
     <input type="text" v-model="newLandmark.description" placeholder="" />
     <input type="number" v-model="newLandmark.rating" placeholder="" />

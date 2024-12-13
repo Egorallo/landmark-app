@@ -32,7 +32,7 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     }
     const fetchedLandmarks = await getAllLandmarks();
     console.log('fetched from store: ', fetchedLandmarks);
-    landmarks.value = fetchedLandmarks;
+    landmarks.value = fetchedLandmarks.sort((a, b) => b.rating - a.rating);
   }
 
   async function addLandmark(newLandmark: Landmark) {

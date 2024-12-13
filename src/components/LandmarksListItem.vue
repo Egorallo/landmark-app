@@ -27,21 +27,21 @@ defineProps<Props>();
       <div class="landmarks-list-item__name">
         {{ landmark.name }}
       </div>
-      <div class="landmarks-list-item__rating">Rating: {{ landmark.rating }}</div>
+      <div class="landmarks-list-item__rating">Rating: {{ landmark.rating }} ⭐</div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .landmarks-list-item {
-  width: 100%;
+  width: 95%;
   padding-left: 10px;
   display: flex;
   justify-content: flex-start;
   column-gap: 20px;
   transition: background-color 0.3s ease;
   border-radius: 8px;
-  height: 120px;
+  min-height: 120px;
 }
 
 .landmarks-list-item:hover {
@@ -65,7 +65,7 @@ defineProps<Props>();
 }
 
 .landmarks-list-item__right {
-  padding-top: 8px;
+  padding-top: 12px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
