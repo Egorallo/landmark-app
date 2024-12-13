@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onClickOutside } from '@vueuse/core';
-import { ref } from 'vue';
 import BaseButton from './BaseButton.vue';
 
 interface Props {
@@ -15,12 +13,6 @@ defineProps<Props>();
 
 const emit = defineEmits(['modal-close', 'submit']);
 
-const target = ref(null);
-
-onClickOutside(target, () => {
-  emit('modal-close');
-});
-
 function handleSubmitAndClose() {
   emit('submit');
   emit('modal-close');
@@ -28,9 +20,9 @@ function handleSubmitAndClose() {
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-mask">
+  <div v-if="isOpen" class="modal-mask" @click="emit('modal-close')">
     <div class="modal-wrapper">
-      <div class="modal-container" ref="target">
+      <div @click.stop class="modal-container">
         <div class="modal-header">
           <slot name="header"> default header </slot>
         </div>
@@ -65,7 +57,7 @@ function handleSubmitAndClose() {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-container {
-  width: 300px;
+  max-width: 400px;
   margin: 150px auto;
   padding: 20px 30px;
   background-color: var(--bg-color);

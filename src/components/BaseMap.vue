@@ -15,9 +15,7 @@ onMounted(() => {
   tileLayer.addTo(mapInstance.value as Map);
 
   const marker = L.marker([51.5, -0.09]).addTo(mapInstance.value as Map);
-  marker
-    .bindPopup(`<b>Hello world!</b><br>I am a popup.<img src="${abobaImage}" alt="haha">`)
-    .openPopup();
+  marker.bindPopup(`<b>Hello world!</b><br>I am a popup.<img src="${abobaImage}" alt="haha">`);
 });
 </script>
 
@@ -29,5 +27,6 @@ onMounted(() => {
 .map {
   /* width: 70%; */
   height: 100%;
+  border-radius: 8px;
 }
 </style>

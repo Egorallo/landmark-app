@@ -62,11 +62,26 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
     <div v-else>No landmarks available.</div>
 
     <BaseButton custom-styles="custom-b-class" @click="openModal">Add new landmark +</BaseButton>
-    <LandmarkAddModal :user-id="userId" :isModalOpened="isModalOpened" :closeModal="closeModal" />
+    <Transition name="fade">
+      <LandmarkAddModal
+        v-if="isModalOpened"
+        :isModalOpened="isModalOpened"
+        :user-id="userId"
+        :close-modal="closeModal"
+      />
+    </Transition>
   </div>
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .custom-b-class {
   width: 50%;
 }

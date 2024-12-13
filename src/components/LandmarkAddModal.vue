@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
-// import BaseMap from './BaseMap.vue';
+import BaseMap from './BaseMap.vue';
 import { ref, reactive } from 'vue';
 import { MAX_FILES, MAX_FILE_SIZE_MB } from '@/constants/files';
 import { useLandmarksStore } from '@/stores/landmarks';
@@ -33,7 +33,7 @@ const newLandmark = reactive<Landmark>({
   userRating: 0,
   name: '',
   description: '',
-  rating: 0,
+  rating: 5,
   long: 0,
   lat: 0,
   images: [],
@@ -103,23 +103,81 @@ async function addNewLandmark(landmark: Landmark) {
     @modal-close="closeModal"
   >
     <template #header>
-      <h2>Add new landmark</h2>
+      <h3>Add new landmark</h3>
     </template>
 
     <template #content>
-      <input type="text" v-model="newLandmark.name" placeholder="Name" />
-      <input type="text" v-model="newLandmark.description" placeholder="Description" />
-      <input type="number" v-model="newLandmark.rating" placeholder="Rating" />
-      <input type="number" v-model="newLandmark.long" placeholder="Longitude" />
-      <input type="number" v-model="newLandmark.lat" placeholder="Latitude" />
-      <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" multiple />
+      <div class="modal-body">
+        <BaseMap class="mappa"></BaseMap>
+        <input
+          class="modal-body__input title"
+          type="text"
+          v-model="newLandmark.name"
+          placeholder="Name"
+        />
+        <textarea
+          class="modal-body__input description"
+          v-model="newLandmark.description"
+          placeholder="Description"
+          maxlength="80"
+        />
+        <label for="rating">Rating</label>
+        <select
+          class="modal-body__input rating"
+          v-model="newLandmark.rating"
+          name="ratingValue"
+          id="rating"
+        >
+          <option value="1">⭐</option>
+          <option value="2">⭐⭐</option>
+          <option value="3">⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+          <option value="5">⭐⭐⭐⭐⭐</option>
+        </select>
+        <input
+          class="modal-body__input number"
+          type="number"
+          v-model="newLandmark.long"
+          placeholder="Longitude"
+        />
+        <input
+          class="modal-body__input number"
+          type="number"
+          v-model="newLandmark.lat"
+          placeholder="Latitude"
+        />
+        <input
+          class="modal-body__input file"
+          type="file"
+          ref="fileInput"
+          @change="handleFileChange"
+          accept="image/*"
+          multiple
+        />
+      </div>
     </template>
   </BaseModal>
 </template>
 
 <style scoped>
+.mappa {
+  height: 200px;
+}
+
 .modal-body {
   display: flex;
   flex-direction: column;
+  row-gap: 15px;
+}
+
+.modal-body__input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 5px;
+}
+
+.description {
+  resize: none;
 }
 </style>
