@@ -18,6 +18,7 @@
   --button-main-color: #ff7300;
   --button-text-color: #000000;
   --button-main-color-hover: #ff9c4d;
+  --button-disabled-color: #ccc;
 }
 
 html {

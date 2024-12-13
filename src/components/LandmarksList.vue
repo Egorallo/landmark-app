@@ -6,6 +6,7 @@ import { storeToRefs } from 'pinia';
 import LandmarksListItem from './LandmarksListItem.vue';
 import { compressImage } from '@/utils/imageCompressor';
 import { MAX_FILES, MAX_FILE_SIZE_MB } from '@/constants/files';
+import BaseButton from './BaseButton.vue';
 
 interface Landmark {
   id?: string;
@@ -138,11 +139,17 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
     <input type="number" v-model="newLandmark.lat" placeholder="" />
     <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" multiple />
 
-    <button @click="addNewLandmark(newLandmark)">Finish</button>
+    <BaseButton custom-styles="custom-b-class" @click="addNewLandmark(newLandmark)"
+      >Add new landmark +</BaseButton
+    >
   </div>
 </template>
 
 <style scoped>
+.custom-b-class {
+  width: 50%;
+}
+
 .landmarks-list__title {
   display: flex;
   justify-content: center;
