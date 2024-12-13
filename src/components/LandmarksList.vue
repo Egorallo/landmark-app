@@ -7,6 +7,7 @@ import LandmarksListItem from './LandmarksListItem.vue';
 import { compressImage } from '@/utils/imageCompressor';
 import { MAX_FILES, MAX_FILE_SIZE_MB } from '@/constants/files';
 import BaseButton from './BaseButton.vue';
+import BaseModal from './BaseModal.vue';
 
 interface Landmark {
   id?: string;
@@ -19,6 +20,15 @@ interface Landmark {
   lat: number;
   images: string[];
 }
+
+const isModalOpened = ref(false);
+
+const openModal = () => {
+  isModalOpened.value = true;
+};
+const closeModal = () => {
+  isModalOpened.value = false;
+};
 
 const landmarksStore = useLandmarksStore();
 const userStore = useUserStore();
@@ -139,10 +149,18 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
     <input type="number" v-model="newLandmark.lat" placeholder="" />
     <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" multiple />
 
-    <BaseButton custom-styles="custom-b-class" @click="addNewLandmark(newLandmark)"
-      >Add new landmark +</BaseButton
-    >
+    <BaseButton custom-styles="custom-b-class" @click="openModal">Add new landmark +</BaseButton>
   </div>
+  <BaseModal
+    :isOpen="isModalOpened"
+    @modal-close="closeModal"
+    @submit="addNewLandmark(newLandmark)"
+    :button-text="'Add landmark'"
+  >
+    <template #header>
+      <h2>Add new landmark</h2>
+    </template>
+  </BaseModal>
 </template>
 
 <style scoped>
