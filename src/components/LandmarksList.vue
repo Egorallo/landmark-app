@@ -62,6 +62,7 @@ const displayedLandmarks = computed(() => {
         :user-id="userId"
         :close-modal="closeModal"
         :landmark-markers="props.landmarkMarkers"
+        @modal-close-button="closeModal"
       />
     </Transition>
   </div>

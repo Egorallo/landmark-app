@@ -15,6 +15,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const landmarksStore = useLandmarksStore();
+const emits = defineEmits(['modal-close-button']);
 
 const newLandmark = reactive<Landmark>({
   id: '',
@@ -115,7 +116,10 @@ const canAdd = computed(() => {
     :button-disabled="!canAdd"
   >
     <template #header>
-      <h3>Add new landmark</h3>
+      <div class="modal-header">
+        <h3>Add new landmark</h3>
+        <button class="modal-header__button" @click="emits('modal-close-button')">❌</button>
+      </div>
     </template>
 
     <template #content>
@@ -181,6 +185,24 @@ const canAdd = computed(() => {
   height: 400px;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header__button {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  border: none;
+}
+
+.modal-header__button:hover {
+  cursor: pointer;
+}
+
 .modal-body {
   display: flex;
   flex-direction: column;
@@ -211,9 +233,16 @@ const canAdd = computed(() => {
   height: 100px;
   background-color: #4c4c4c;
   display: block;
+  border: 1px dashed #8c8a8a;
 }
 
 .file {
   display: none;
+}
+
+@media (max-width: 750px) {
+  .mappa {
+    height: 220px;
+  }
 }
 </style>

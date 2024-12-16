@@ -64,4 +64,10 @@ function handleSubmitAndClose() {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 }
+
+@media (max-width: 750px) {
+  .modal-container {
+    width: 90%;
+  }
+}
 </style>
