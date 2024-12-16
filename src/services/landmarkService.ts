@@ -10,18 +10,6 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebaseInit';
 
-interface Landmark {
-  id?: string;
-  userId: string;
-  userRating: number;
-  name: string;
-  description: string;
-  rating: number;
-  long: number;
-  lat: number;
-  images: string[];
-}
-
 export async function addNewLandmark(userId: string, newLandmark: Landmark) {
   const userDocRef = doc(db, 'users', userId);
 

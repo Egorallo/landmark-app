@@ -1,27 +1,16 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
 import BaseMap from './BaseMap.vue';
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { MAX_FILES, MAX_FILE_SIZE_MB } from '@/constants/files';
 import { useLandmarksStore } from '@/stores/landmarks';
 import { compressImage } from '@/utils/imageCompressor';
-
-interface Landmark {
-  id?: string;
-  userId: string;
-  userRating: number;
-  name: string;
-  description: string;
-  rating: number;
-  long: number;
-  lat: number;
-  images: string[];
-}
 
 interface Props {
   isModalOpened: boolean;
   userId: string | null;
   closeModal: () => void;
+  landmarkMarkers: { lat: number; lng: number }[];
 }
 
 const props = defineProps<Props>();
@@ -82,17 +71,28 @@ async function addNewLandmark(landmark: Landmark) {
   }
 
   landmark.images = compressedImages;
-
   await landmarksStore.addLandmark(landmark);
-
-  newLandmark.description = '';
-  newLandmark.name = '';
-  newLandmark.rating = 0;
-  newLandmark.long = 0;
-  newLandmark.lat = 0;
-  files.value = null;
-  fileInput.value = null;
 }
+
+function handleNewMarker({ fl, lat, lng }: { fl: boolean; lat: number; lng: number }) {
+  if (!fl) {
+    newLandmark.lat = 0;
+    newLandmark.long = 0;
+    return;
+  }
+  newLandmark.lat = lat;
+  newLandmark.long = lng;
+}
+
+const canAdd = computed(() => {
+  return (
+    newLandmark.name.trim().length > 0 &&
+    newLandmark.description.length > 0 &&
+    newLandmark.lat !== 0 &&
+    newLandmark.long !== 0 &&
+    files.value
+  );
+});
 </script>
 
 <template>
@@ -101,6 +101,7 @@ async function addNewLandmark(landmark: Landmark) {
     :is-open="isModalOpened"
     @submit="addNewLandmark(newLandmark)"
     @modal-close="closeModal"
+    :button-disabled="!canAdd"
   >
     <template #header>
       <h3>Add new landmark</h3>
@@ -108,7 +109,12 @@ async function addNewLandmark(landmark: Landmark) {
 
     <template #content>
       <div class="modal-body">
-        <BaseMap class="mappa"></BaseMap>
+        <BaseMap
+          :landmark-markers="landmarkMarkers"
+          @placed-marker="handleNewMarker"
+          :add-markers="true"
+          class="mappa"
+        ></BaseMap>
         <input
           class="modal-body__input title"
           type="text"
@@ -135,18 +141,6 @@ async function addNewLandmark(landmark: Landmark) {
           <option value="5">⭐⭐⭐⭐⭐</option>
         </select>
         <input
-          class="modal-body__input number"
-          type="number"
-          v-model="newLandmark.long"
-          placeholder="Longitude"
-        />
-        <input
-          class="modal-body__input number"
-          type="number"
-          v-model="newLandmark.lat"
-          placeholder="Latitude"
-        />
-        <input
           class="modal-body__input file"
           type="file"
           ref="fileInput"
@@ -161,7 +155,7 @@ async function addNewLandmark(landmark: Landmark) {
 
 <style scoped>
 .mappa {
-  height: 200px;
+  height: 400px;
 }
 
 .modal-body {

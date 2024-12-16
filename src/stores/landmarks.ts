@@ -8,18 +8,6 @@ import {
 } from '../services/landmarkService';
 import { useUserStore } from './user';
 
-interface Landmark {
-  id?: string;
-  userId: string;
-  userRating: number;
-  name: string;
-  description: string;
-  rating: number;
-  long: number;
-  lat: number;
-  images: string[];
-}
-
 export const useLandmarksStore = defineStore('landmarks', () => {
   const userStore = useUserStore();
   const userId = computed(() => userStore.userId);
@@ -31,7 +19,6 @@ export const useLandmarksStore = defineStore('landmarks', () => {
       return;
     }
     const fetchedLandmarks = await getAllLandmarks();
-    console.log('fetched from store: ', fetchedLandmarks);
     landmarks.value = fetchedLandmarks.sort((a, b) => b.rating - a.rating);
   }
 
@@ -39,8 +26,10 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     if (!userId.value) {
       return;
     }
+
     await addNewLandmark(userId.value, newLandmark);
-    landmarks.value.push(newLandmark);
+
+    landmarks.value = [...landmarks.value, newLandmark];
   }
 
   async function deleteLandmark(landmarkId: string) {
@@ -76,7 +65,6 @@ export const useLandmarksStore = defineStore('landmarks', () => {
   );
 
   watch(userId, async (newUserId) => {
-    console.log('mmmmm');
     if (newUserId) {
       await fetchLandmarks();
     }

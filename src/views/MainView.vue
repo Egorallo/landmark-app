@@ -1,12 +1,30 @@
 <script setup lang="ts">
 import BaseMap from '@/components/BaseMap.vue';
 import LandmarksList from '@/components/LandmarksList.vue';
+import { useLandmarksStore } from '@/stores/landmarks';
+import { storeToRefs } from 'pinia';
+import { ref, watch } from 'vue';
+
+const landmarksStore = useLandmarksStore();
+const { landmarks, landmarksByUserId } = storeToRefs(landmarksStore);
+
+const landmarkMarkers = ref<{ lat: number; lng: number }[]>([]);
+watch(landmarks, (newLandmarks) => {
+  landmarkMarkers.value = [];
+  newLandmarks.forEach((landmark) => {
+    landmarkMarkers.value.push({ lat: landmark.lat, lng: landmark.long });
+  });
+});
 </script>
 
 <template>
   <div class="main__container">
-    <BaseMap />
-    <LandmarksList />
+    <BaseMap :landmark-markers="landmarkMarkers" />
+    <LandmarksList
+      :landmark-markers="landmarkMarkers"
+      :landmarks="landmarks"
+      :landmarks-by-user-id="landmarksByUserId"
+    />
   </div>
 </template>
 

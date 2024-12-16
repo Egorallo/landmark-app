@@ -57,8 +57,8 @@ function handleSubmitAndClose() {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-container {
-  max-width: 400px;
-  margin: 150px auto;
+  max-width: 450px;
+  margin: 50px auto;
   padding: 20px 30px;
   background-color: var(--bg-color);
   border-radius: 8px;

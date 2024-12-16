@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { useLandmarksStore } from '@/stores/landmarks';
+// import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
-import { ref, watch, computed } from 'vue';
-import { storeToRefs } from 'pinia';
+import { ref, computed } from 'vue';
+// import { storeToRefs } from 'pinia';
 import LandmarksListItem from './LandmarksListItem.vue';
 import BaseButton from './BaseButton.vue';
 import LandmarkAddModal from './LandmarkAddModal.vue';
+
+interface Props {
+  landmarks: Landmark[];
+  landmarksByUserId: Landmark[];
+  landmarkMarkers: { lat: number; lng: number }[];
+}
+
+const props = defineProps<Props>();
 
 const isModalOpened = ref(false);
 
@@ -16,28 +24,13 @@ const closeModal = () => {
   isModalOpened.value = false;
 };
 
-const landmarksStore = useLandmarksStore();
 const userStore = useUserStore();
 
 const userId = userStore.userId;
 const showOnlyUserLandmarks = ref(false);
-const { landmarks, landmarksByUserId } = storeToRefs(landmarksStore);
 
 const displayedLandmarks = computed(() => {
-  console.log('accessed computed landmarks');
-  return showOnlyUserLandmarks.value ? landmarksByUserId.value : landmarks.value;
-});
-
-watch(displayedLandmarks, (newDisplayedLandmarks) => {
-  console.log('Displayed landmarks updated:', newDisplayedLandmarks);
-});
-
-watch(landmarks, (newLandmarks) => {
-  console.log('Landmarks updated:', newLandmarks);
-});
-
-watch(landmarksByUserId, (newLandmarksByUserId) => {
-  console.log('Landmarks by User ID updated:', newLandmarksByUserId);
+  return showOnlyUserLandmarks.value ? props.landmarksByUserId : props.landmarks;
 });
 </script>
 
@@ -68,6 +61,7 @@ watch(landmarksByUserId, (newLandmarksByUserId) => {
         :isModalOpened="isModalOpened"
         :user-id="userId"
         :close-modal="closeModal"
+        :landmark-markers="props.landmarkMarkers"
       />
     </Transition>
   </div>
