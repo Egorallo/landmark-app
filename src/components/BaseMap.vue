@@ -2,11 +2,10 @@
 import { onMounted, ref, watch } from 'vue';
 import L, { Map, TileLayer } from 'leaflet';
 import userLocationIconUrl from './icons/user_location.svg';
+import { useLocationStore } from '@/stores/location';
 
 const mapContainer = ref<HTMLElement | null>(null);
 const mapInstance = ref<L.Map | null>(null);
-const lat = ref();
-const long = ref();
 const userLocationIcon = ref();
 const currentMarker = ref<L.Marker | null>(null);
 
@@ -18,15 +17,34 @@ interface Props {
 const props = defineProps<Props>();
 const emits = defineEmits(['placedMarker']);
 
-onMounted(() => {
+const locationStore = useLocationStore();
+
+onMounted(async () => {
   if (!mapContainer.value) return;
+
   mapInstance.value = L.map(mapContainer.value).setView([51.505, -0.09], 3);
 
   const tileLayer: TileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-
   tileLayer.addTo(mapInstance.value as Map);
 
   addLandmarkMarkers();
+
+  if (!locationStore.isLocationFetched) {
+    await locationStore.fetchLocation();
+  }
+
+  if (locationStore.lat && locationStore.long) {
+    mapInstance.value.setView([locationStore.lat, locationStore.long], 13);
+
+    userLocationIcon.value = L.icon({
+      iconUrl: userLocationIconUrl,
+      iconSize: [35, 35],
+    });
+
+    L.marker([locationStore.lat, locationStore.long], { icon: userLocationIcon.value }).addTo(
+      mapInstance.value as Map,
+    );
+  }
 
   if (props.addMarkers) {
     mapInstance.value.on('click', (e) => {
@@ -50,8 +68,6 @@ onMounted(() => {
       marker.addTo(mapInstance.value as Map);
     });
   }
-
-  getLocation();
 });
 
 function addLandmarkMarkers() {
@@ -69,27 +85,6 @@ watch(
   },
   { deep: true },
 );
-
-function getLocation() {
-  console.log('got  u nigga');
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      lat.value = position.coords.latitude;
-      long.value = position.coords.longitude;
-
-      userLocationIcon.value = L.icon({
-        iconUrl: userLocationIconUrl,
-        iconSize: [35, 35],
-      });
-      mapInstance.value?.setView([lat.value, long.value], 13);
-      L.marker([lat.value, long.value], { icon: userLocationIcon.value }).addTo(
-        mapInstance.value as Map,
-      );
-    });
-  } else {
-    //mapInstance.value?.setView([51.505, -0.09], 13);
-  }
-}
 </script>
 
 <template>
