@@ -71,6 +71,7 @@ watch(
 );
 
 function getLocation() {
+  console.log('got  u nigga');
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
       lat.value = position.coords.latitude;

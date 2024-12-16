@@ -52,6 +52,17 @@ function handleFileChange() {
   files.value = selectedFiles;
 }
 
+const handleDrop = (e: DragEvent) => {
+  e.preventDefault();
+  const files = e.dataTransfer?.files;
+  if (files && files.length > 0) {
+    if (fileInput.value) {
+      fileInput.value.files = files;
+    }
+    handleFileChange();
+  }
+};
+
 async function addNewLandmark(landmark: Landmark) {
   if (!files.value || files.value.length === 0) {
     alert('Please select at least one image.');
@@ -140,14 +151,26 @@ const canAdd = computed(() => {
           <option value="4">⭐⭐⭐⭐</option>
           <option value="5">⭐⭐⭐⭐⭐</option>
         </select>
-        <input
-          class="modal-body__input file"
-          type="file"
-          ref="fileInput"
-          @change="handleFileChange"
-          accept="image/*"
-          multiple
-        />
+        <div class="modal-body__input__file__container">
+          <label
+            for="fileInput"
+            class="modal-body__input__file__text"
+            @dragover.prevent
+            @drop="handleDrop"
+          >
+            Upload or drag&drop your images
+          </label>
+          <input
+            class="modal-body__input file"
+            type="file"
+            ref="fileInput"
+            @change="handleFileChange"
+            accept="image/*"
+            multiple
+            id="fileInput"
+          />
+          <div>Files uploaded: {{ files?.length }}</div>
+        </div>
       </div>
     </template>
   </BaseModal>
@@ -171,7 +194,26 @@ const canAdd = computed(() => {
   border-radius: 5px;
 }
 
+.title {
+  font-family: 'Mulish', serif;
+}
+
 .description {
   resize: none;
+}
+
+.modal-body__input__file__text {
+  padding: 10px;
+  cursor: pointer;
+  color: var(--primary-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  height: 100px;
+  background-color: #4c4c4c;
+  display: block;
+}
+
+.file {
+  display: none;
 }
 </style>
