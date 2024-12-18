@@ -8,6 +8,8 @@ declare global {
     name: string;
     description: string;
     rating: number;
+    totalRating: number;
+    visitors: number;
     long: number;
     lat: number;
     images: string[];

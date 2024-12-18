@@ -5,8 +5,10 @@ import {
   addNewLandmark,
   removeLandmark,
   updLandmark,
+  updLandmarkRating,
 } from '../services/landmarkService';
 import { useUserStore } from './user';
+import { evaluateScore } from '@/utils/scoreEvaluator';
 
 export const useLandmarksStore = defineStore('landmarks', () => {
   const userStore = useUserStore();
@@ -19,7 +21,9 @@ export const useLandmarksStore = defineStore('landmarks', () => {
       return;
     }
     const fetchedLandmarks = await getAllLandmarks();
-    landmarks.value = fetchedLandmarks.sort((a, b) => b.rating - a.rating);
+    landmarks.value = fetchedLandmarks.sort(
+      (a, b) => evaluateScore(b.rating, b.visitors) - evaluateScore(a.rating, a.visitors),
+    );
   }
 
   async function addLandmark(newLandmark: Landmark) {
@@ -50,10 +54,27 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     if (!userId.value) {
       return;
     }
+    if (updatedData.rating) {
+    }
     landmarks.value = landmarks.value.map((landmark) =>
       landmark.id === landmarkId ? { ...landmark, ...updatedData } : landmark,
     );
     await updLandmark(userId.value, landmarkId, updatedData);
+  }
+
+  async function updateLandmarkRating(landmarkId: string, landmarkUserId: string, rating: number) {
+    const landmark = landmarks.value.find((landmark) => landmark.id === landmarkId);
+    if (!landmark || !userId.value) {
+      return;
+    }
+    console.log('from store ', landmarkId);
+    const updatedData = {
+      rating: (landmark.totalRating + rating) / (landmark.visitors + 1),
+      totalRating: landmark.totalRating + rating,
+      visitors: landmark.visitors + 1,
+    };
+    const res = await updLandmarkRating(userId.value, landmarkUserId, landmarkId, updatedData);
+    return res;
   }
 
   if (userStore.userId) {
@@ -76,6 +97,7 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     addLandmark,
     deleteLandmark,
     updateLandmark,
+    updateLandmarkRating,
     landmarksByUserId,
   };
 });

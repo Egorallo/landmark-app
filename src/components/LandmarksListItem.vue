@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { evaluateScore } from '@/utils/scoreEvaluator';
 interface Props {
   landmark: Landmark;
 }
@@ -16,6 +17,7 @@ defineProps<Props>();
         {{ landmark.name }}
       </div>
       <div class="landmarks-list-item__rating">Rating: {{ landmark.rating }} ⭐</div>
+      <div>Score: {{ evaluateScore(landmark.rating, landmark.visitors) }}</div>
     </div>
   </div>
 </template>

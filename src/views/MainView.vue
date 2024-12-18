@@ -10,6 +10,7 @@ const { landmarks, landmarksByUserId } = storeToRefs(landmarksStore);
 
 const landmarkMarkers = ref<{ lat: number; lng: number }[]>([]);
 watch(landmarks, (newLandmarks) => {
+  console.log('updateddada');
   landmarkMarkers.value = [];
   newLandmarks.forEach((landmark) => {
     landmarkMarkers.value.push({ lat: landmark.lat, lng: landmark.long });

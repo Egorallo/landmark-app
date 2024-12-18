@@ -16,8 +16,18 @@ const landmarksStore = useLandmarksStore();
 const newRating = ref(0);
 
 async function updateLandmarkRating(newRating: number) {
-  console.log('Rating updated to:', newRating);
-  await landmarksStore.updateLandmark(props.landmark.id!, { rating: newRating });
+  const res = await landmarksStore.updateLandmarkRating(
+    props.landmark.id!,
+    props.landmark.userId,
+    +newRating,
+  );
+  if (res) {
+    console.log('Rating updated successfully');
+    await landmarksStore.fetchLandmarks();
+    props.closeModal();
+  } else {
+    console.log('Rating update failed');
+  }
 }
 
 onMounted(() => {

@@ -7,6 +7,8 @@ import {
   addDoc,
   collection,
   setDoc,
+  query,
+  where,
 } from 'firebase/firestore';
 import { db } from './firebaseInit';
 
@@ -72,8 +74,34 @@ export async function updLandmark(
   landmarkId: string,
   updatedData: Partial<Landmark>,
 ) {
-  const landmarkDocRef = doc(db, `users/${userId}/landmarks`, landmarkId);
+  console.log('nigge ', landmarkId);
+  const landmarkDocRef = doc(db, `users/${userId}/landmarks/${landmarkId}`);
   await updateDoc(landmarkDocRef, updatedData);
+}
+
+export async function updLandmarkRating(
+  userId: string,
+  landmarkUserId: string,
+  landmarkId: string,
+  updatedData: Partial<Landmark>,
+) {
+  console.log(landmarkId);
+  const landmarksRatedRef = collection(db, `users/${userId}/landmarksRated`);
+
+  const q = query(landmarksRatedRef, where('landmarkId', '==', landmarkId));
+  const querySnapshot = await getDocs(q);
+  console.log(querySnapshot.empty);
+
+  if (!querySnapshot.empty) {
+    console.log('HAHAHAHAHAHAHA');
+    return false;
+  }
+
+  await updLandmark(landmarkUserId, landmarkId, updatedData);
+
+  await addDoc(landmarksRatedRef, { landmarkId });
+
+  return true;
 }
 
 export async function getLandmarkById(userId: string, landmarkId: string) {

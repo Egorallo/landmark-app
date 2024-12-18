@@ -24,6 +24,8 @@ const newLandmark = reactive<Landmark>({
   name: '',
   description: '',
   rating: 5,
+  totalRating: 5,
+  visitors: 1,
   long: 0,
   lat: 0,
   images: [],
@@ -81,7 +83,7 @@ async function addNewLandmark(landmark: Landmark) {
       return;
     }
   }
-
+  landmark.totalRating = landmark.rating;
   landmark.images = compressedImages;
   await landmarksStore.addLandmark(landmark);
 }
