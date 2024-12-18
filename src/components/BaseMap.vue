@@ -27,11 +27,12 @@ onMounted(async () => {
   const tileLayer: TileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
   tileLayer.addTo(mapInstance.value as Map);
 
-  addLandmarkMarkers();
-
   if (!locationStore.isLocationFetched) {
     await locationStore.fetchLocation();
+    console.log('location fetched');
   }
+  console.log('hubaboba');
+  addLandmarkMarkers();
 
   if (locationStore.lat && locationStore.long) {
     mapInstance.value.setView([locationStore.lat, locationStore.long], 13);

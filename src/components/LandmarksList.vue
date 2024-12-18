@@ -6,6 +6,8 @@ import { ref, computed } from 'vue';
 import LandmarksListItem from './LandmarksListItem.vue';
 import BaseButton from './BaseButton.vue';
 import LandmarkAddModal from './LandmarkAddModal.vue';
+import LandmarkItemModal from './LandmarkItemModal.vue';
+import TriggerLoad from './TriggerLoad.vue';
 
 interface Props {
   landmarks: Landmark[];
@@ -16,12 +18,23 @@ interface Props {
 const props = defineProps<Props>();
 
 const isModalOpened = ref(false);
+const isLandmarkViewModalOpened = ref(false);
+const currentViewingLandmark = ref<Landmark>();
 
 const openModal = () => {
   isModalOpened.value = true;
 };
 const closeModal = () => {
   isModalOpened.value = false;
+};
+
+const openLandmarkViewModal = (landmark: Landmark) => {
+  isLandmarkViewModalOpened.value = true;
+  currentViewingLandmark.value = landmark;
+};
+
+const closeLandmarkViewModal = () => {
+  isLandmarkViewModalOpened.value = false;
 };
 
 const userStore = useUserStore();
@@ -32,6 +45,10 @@ const showOnlyUserLandmarks = ref(false);
 const displayedLandmarks = computed(() => {
   return showOnlyUserLandmarks.value ? props.landmarksByUserId : props.landmarks;
 });
+
+function loadMoreLandmarks() {
+  console.log('loading more landmarks');
+}
 </script>
 
 <template>
@@ -50,7 +67,9 @@ const displayedLandmarks = computed(() => {
         v-for="landmark in displayedLandmarks"
         :key="landmark.id"
         :landmark="landmark"
+        @click="openLandmarkViewModal(landmark)"
       ></LandmarksListItem>
+      <TriggerLoad @intersected="loadMoreLandmarks" />
     </div>
     <div v-else>No landmarks available.</div>
 
@@ -64,6 +83,14 @@ const displayedLandmarks = computed(() => {
         :landmark-markers="props.landmarkMarkers"
         @modal-close-button="closeModal"
       />
+    </Transition>
+    <Transition name="fade">
+      <LandmarkItemModal
+        v-if="isLandmarkViewModalOpened"
+        :is-modal-opened="isLandmarkViewModalOpened"
+        :close-modal="closeLandmarkViewModal"
+        :landmark="currentViewingLandmark!"
+      ></LandmarkItemModal>
     </Transition>
   </div>
 </template>
@@ -103,6 +130,8 @@ const displayedLandmarks = computed(() => {
   row-gap: 5px;
   height: 700px;
   overflow: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 750px) {

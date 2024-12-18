@@ -162,7 +162,7 @@ const canAdd = computed(() => {
             @dragover.prevent
             @drop="handleDrop"
           >
-            Upload or drag&drop your images
+            Upload your images
           </label>
           <input
             class="modal-body__input file"
@@ -207,6 +207,7 @@ const canAdd = computed(() => {
   display: flex;
   flex-direction: column;
   row-gap: 15px;
+  margin-bottom: 10px;
 }
 
 .modal-body__input {
@@ -223,16 +224,23 @@ const canAdd = computed(() => {
 .description {
   resize: none;
 }
+.modal-body__input__file__container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
 .modal-body__input__file__text {
   padding: 10px;
   cursor: pointer;
-  color: var(--primary-color);
+  color: #8c8b8b;
   border-radius: 8px;
   margin-bottom: 10px;
   height: 100px;
   background-color: #4c4c4c;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px dashed #8c8a8a;
 }
 
