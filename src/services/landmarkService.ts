@@ -22,20 +22,49 @@ export async function addNewLandmark(userId: string, newLandmark: Landmark) {
   );
 
   const userLandmarksRef = collection(userDocRef, 'landmarks');
-  await addDoc(userLandmarksRef, {
+
+  const docRef = await addDoc(userLandmarksRef, {
     userId: newLandmark.userId,
     name: newLandmark.name,
     description: newLandmark.description,
     rating: newLandmark.rating,
+    totalRating: newLandmark.totalRating,
+    visitors: newLandmark.visitors,
     long: newLandmark.long,
     lat: newLandmark.lat,
     images: newLandmark.images,
+  });
+
+  const landmarkId = docRef.id;
+
+  const userLandmarksRatedRef = collection(userDocRef, 'landmarksRated');
+
+  await addDoc(userLandmarksRatedRef, {
+    landmarkId,
   });
 }
 
 export async function removeLandmark(userId: string, landmarkId: string) {
   const landmarkDocRef = doc(db, `users/${userId}/landmarks`, landmarkId);
+
   await deleteDoc(landmarkDocRef);
+
+  const usersCollectionRef = collection(db, 'users');
+  const usersSnapshot = await getDocs(usersCollectionRef);
+
+  const deletePromises: Promise<void>[] = [];
+  usersSnapshot.forEach(async (userDoc) => {
+    const userLandmarksRatedRef = collection(userDoc.ref, 'landmarksRated');
+    const landmarksRatedSnapshot = await getDocs(userLandmarksRatedRef);
+
+    landmarksRatedSnapshot.forEach((landmarkRatedDoc) => {
+      if (landmarkRatedDoc.data().landmarkId === landmarkId) {
+        deletePromises.push(deleteDoc(landmarkRatedDoc.ref));
+      }
+    });
+  });
+
+  await Promise.all(deletePromises);
 }
 
 export async function updLandmark(
