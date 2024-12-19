@@ -21,6 +21,15 @@ const closeLandmarkViewModal = () => {
   isLandmarkViewModalOpened.value = false;
 };
 
+const baseMap = ref();
+
+function zoomToLandmark(landmarkId: string) {
+  if (baseMap.value) {
+    baseMap.value.zoomToLandmark(landmarkId);
+    console.log('zooming to landmark', landmarkId);
+  }
+}
+
 watch(landmarks, (newLandmarks) => {
   console.log('updateddada');
   landmarkMarkers.value = [];
@@ -35,11 +44,13 @@ watch(landmarks, (newLandmarks) => {
     <BaseMap
       :landmark-markers="landmarkMarkers"
       @opened-landmark-view-modal="openLandmarkViewModal"
+      ref="baseMap"
     />
     <LandmarksList
       :landmark-markers="landmarkMarkers"
       :landmarks="landmarks"
       :landmarks-by-user-id="landmarksByUserId"
+      @zoom-to-landmark="zoomToLandmark"
     />
     <Transition name="fade">
       <LandmarkItemModal

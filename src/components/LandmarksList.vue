@@ -16,6 +16,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const emits = defineEmits(['zoom-to-landmark']);
 
 const isModalOpened = ref(false);
 const isLandmarkViewModalOpened = ref(false);
@@ -31,6 +32,7 @@ const closeModal = () => {
 const openLandmarkViewModal = (landmark: Landmark) => {
   isLandmarkViewModalOpened.value = true;
   currentViewingLandmark.value = landmark;
+  emits('zoom-to-landmark', landmark.id);
 };
 
 const closeLandmarkViewModal = () => {

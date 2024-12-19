@@ -12,6 +12,7 @@ const mapInstance = ref<L.Map | null>(null);
 const userLocationIcon = ref();
 const currentMarker = ref<L.Marker | null>(null);
 const markerClusterGroup = ref<L.MarkerClusterGroup | null>(null);
+const markerMap = ref<Record<string, L.Marker>>({});
 
 interface Props {
   addMarkers?: boolean;
@@ -84,6 +85,7 @@ function addLandmarkMarkers() {
 
   props.landmarkMarkers.forEach((landmark) => {
     const marker = L.marker([landmark.lat, landmark.lng]);
+    markerMap.value[landmark.id] = marker;
 
     marker.on('click', () => {
       emits('openedLandmarkViewModal', landmark.id);
@@ -93,6 +95,14 @@ function addLandmarkMarkers() {
   });
 }
 
+function zoomToLandmark(id: string) {
+  if (!mapInstance.value || !markerMap.value[id]) return;
+  const marker = markerMap.value[id];
+  const zoomLevel = 20;
+
+  mapInstance.value.setView(marker.getLatLng(), zoomLevel);
+}
+
 watch(
   () => props.landmarkMarkers,
   () => {
@@ -100,6 +110,10 @@ watch(
   },
   { deep: true },
 );
+
+defineExpose({
+  zoomToLandmark,
+});
 </script>
 
 <template>

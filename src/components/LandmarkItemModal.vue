@@ -61,14 +61,21 @@ async function updateLandmarkRating(newRating: number) {
         <div class="modlal-body__description">
           <p>{{ landmark.description }}</p>
         </div>
-        <label for="rating">How you like it: </label>
-        <select class="modal-body__input rating" v-model="newRating" name="ratingValue" id="rating">
-          <option value="1">⭐</option>
-          <option value="2">⭐⭐</option>
-          <option value="3">⭐⭐⭐</option>
-          <option value="4">⭐⭐⭐⭐</option>
-          <option value="5">⭐⭐⭐⭐⭐</option>
-        </select>
+        <div class="modal-body__rating__container">
+          <label for="rating">How you like it: </label>
+          <select
+            class="modal-body__input rating"
+            v-model="newRating"
+            name="ratingValue"
+            id="rating"
+          >
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
+          </select>
+        </div>
       </div>
     </template>
   </BaseModal>
@@ -112,5 +119,18 @@ async function updateLandmarkRating(newRating: number) {
   object-fit: cover;
   border-radius: 8px;
   margin-right: 10px;
+}
+
+.modal-body__rating__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rating {
+  background-color: var(--bg-color-calendar-hover);
+}
+
+.rating:focus {
+  outline: none;
 }
 </style>
