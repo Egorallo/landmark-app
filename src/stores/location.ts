@@ -21,6 +21,7 @@ export const useLocationStore = defineStore('location', () => {
             console.error('Failed to fetch location:', error);
             reject(error);
           },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: Infinity },
         );
       });
     }
