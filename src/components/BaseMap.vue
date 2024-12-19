@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import L, { Map, TileLayer } from 'leaflet';
+import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
 import userLocationIconUrl from './icons/user_location.svg';
 import { useLocationStore } from '@/stores/location';
 
@@ -8,6 +11,7 @@ const mapContainer = ref<HTMLElement | null>(null);
 const mapInstance = ref<L.Map | null>(null);
 const userLocationIcon = ref();
 const currentMarker = ref<L.Marker | null>(null);
+const markerClusterGroup = ref<L.MarkerClusterGroup | null>(null);
 
 interface Props {
   addMarkers?: boolean;
@@ -27,11 +31,13 @@ onMounted(async () => {
   const tileLayer: TileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
   tileLayer.addTo(mapInstance.value as Map);
 
+  markerClusterGroup.value = L.markerClusterGroup();
+  markerClusterGroup.value.addTo(mapInstance.value as Map);
+
   if (!locationStore.isLocationFetched) {
     await locationStore.fetchLocation();
     console.log('location fetched');
   }
-  console.log('hubaboba');
   addLandmarkMarkers();
 
   if (locationStore.lat && locationStore.long) {
@@ -74,13 +80,16 @@ onMounted(async () => {
 function addLandmarkMarkers() {
   if (!props.landmarkMarkers || !mapInstance.value) return;
 
+  markerClusterGroup.value!.clearLayers();
+
   props.landmarkMarkers.forEach((landmark) => {
     const marker = L.marker([landmark.lat, landmark.lng]);
-    marker.addTo(mapInstance.value as Map);
 
     marker.on('click', () => {
       emits('openedLandmarkViewModal', landmark.id);
     });
+
+    markerClusterGroup.value?.addLayer(marker);
   });
 }
 
