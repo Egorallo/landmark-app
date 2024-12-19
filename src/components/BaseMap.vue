@@ -11,11 +11,11 @@ const currentMarker = ref<L.Marker | null>(null);
 
 interface Props {
   addMarkers?: boolean;
-  landmarkMarkers?: { lat: number; lng: number }[];
+  landmarkMarkers?: { id: string; lat: number; lng: number }[];
 }
 
 const props = defineProps<Props>();
-const emits = defineEmits(['placedMarker']);
+const emits = defineEmits(['placedMarker', 'openedLandmarkViewModal']);
 
 const locationStore = useLocationStore();
 
@@ -75,7 +75,12 @@ function addLandmarkMarkers() {
   if (!props.landmarkMarkers || !mapInstance.value) return;
 
   props.landmarkMarkers.forEach((landmark) => {
-    L.marker([landmark.lat, landmark.lng]).addTo(mapInstance.value as Map);
+    const marker = L.marker([landmark.lat, landmark.lng]);
+    marker.addTo(mapInstance.value as Map);
+
+    marker.on('click', () => {
+      emits('openedLandmarkViewModal', landmark.id);
+    });
   });
 }
 

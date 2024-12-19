@@ -26,6 +26,10 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     );
   }
 
+  function getLandmarkById(landmarkId: string) {
+    return landmarks.value.find((landmark) => landmark.id === landmarkId);
+  }
+
   async function addLandmark(newLandmark: Landmark) {
     if (!userId.value) {
       return;
@@ -94,6 +98,7 @@ export const useLandmarksStore = defineStore('landmarks', () => {
   return {
     landmarks,
     fetchLandmarks,
+    getLandmarkById,
     addLandmark,
     deleteLandmark,
     updateLandmark,

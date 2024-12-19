@@ -4,28 +4,51 @@ import LandmarksList from '@/components/LandmarksList.vue';
 import { useLandmarksStore } from '@/stores/landmarks';
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
+import LandmarkItemModal from '@/components/LandmarkItemModal.vue';
 
 const landmarksStore = useLandmarksStore();
 const { landmarks, landmarksByUserId } = storeToRefs(landmarksStore);
 
-const landmarkMarkers = ref<{ lat: number; lng: number }[]>([]);
+const landmarkMarkers = ref<{ id: string; lat: number; lng: number }[]>([]);
+const isLandmarkViewModalOpened = ref(false);
+const currentViewingLandmark = ref<Landmark>();
+
+function openLandmarkViewModal(landmarkId: string) {
+  currentViewingLandmark.value = landmarksStore.getLandmarkById(landmarkId);
+  isLandmarkViewModalOpened.value = true;
+}
+const closeLandmarkViewModal = () => {
+  isLandmarkViewModalOpened.value = false;
+};
+
 watch(landmarks, (newLandmarks) => {
   console.log('updateddada');
   landmarkMarkers.value = [];
   newLandmarks.forEach((landmark) => {
-    landmarkMarkers.value.push({ lat: landmark.lat, lng: landmark.long });
+    landmarkMarkers.value.push({ id: landmark.id!, lat: landmark.lat, lng: landmark.long });
   });
 });
 </script>
 
 <template>
   <div class="main__container">
-    <BaseMap :landmark-markers="landmarkMarkers" />
+    <BaseMap
+      :landmark-markers="landmarkMarkers"
+      @opened-landmark-view-modal="openLandmarkViewModal"
+    />
     <LandmarksList
       :landmark-markers="landmarkMarkers"
       :landmarks="landmarks"
       :landmarks-by-user-id="landmarksByUserId"
     />
+    <Transition name="fade">
+      <LandmarkItemModal
+        v-if="isLandmarkViewModalOpened"
+        :is-modal-opened="isLandmarkViewModalOpened"
+        :close-modal="closeLandmarkViewModal"
+        :landmark="currentViewingLandmark!"
+      ></LandmarkItemModal>
+    </Transition>
   </div>
 </template>
 

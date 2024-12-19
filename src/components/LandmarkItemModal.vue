@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useLandmarksStore } from '@/stores/landmarks';
 
 interface Props {
@@ -13,7 +13,7 @@ const props = defineProps<Props>();
 const emits = defineEmits(['modal-close-button']);
 const landmarksStore = useLandmarksStore();
 
-const newRating = ref(0);
+const newRating = ref(5);
 
 async function updateLandmarkRating(newRating: number) {
   const res = await landmarksStore.updateLandmarkRating(
@@ -29,11 +29,6 @@ async function updateLandmarkRating(newRating: number) {
     console.log('Rating update failed');
   }
 }
-
-onMounted(() => {
-  newRating.value = props.landmark.rating;
-  console.log('viewing landmark:', props.landmark);
-});
 </script>
 
 <template>

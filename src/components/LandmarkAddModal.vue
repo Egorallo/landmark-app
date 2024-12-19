@@ -10,7 +10,7 @@ interface Props {
   isModalOpened: boolean;
   userId: string | null;
   closeModal: () => void;
-  landmarkMarkers: { lat: number; lng: number }[];
+  landmarkMarkers: { id: string; lat: number; lng: number }[];
 }
 
 const props = defineProps<Props>();
@@ -84,7 +84,9 @@ async function addNewLandmark(landmark: Landmark) {
     }
   }
   landmark.totalRating = landmark.rating;
+
   landmark.images = compressedImages;
+
   await landmarksStore.addLandmark(landmark);
 }
 

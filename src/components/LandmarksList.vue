@@ -12,7 +12,7 @@ import TriggerLoad from './TriggerLoad.vue';
 interface Props {
   landmarks: Landmark[];
   landmarksByUserId: Landmark[];
-  landmarkMarkers: { lat: number; lng: number }[];
+  landmarkMarkers: { id: string; lat: number; lng: number }[];
 }
 
 const props = defineProps<Props>();
