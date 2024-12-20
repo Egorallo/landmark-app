@@ -2,20 +2,36 @@
 import { signOut } from '@/services/authService';
 import IconSignOut from './icons/IconSignOut.vue';
 import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import { getCurrentUser } from '@/services/authService';
+import { generateHexColor } from '@/utils/radnomHexColor';
 
 const router = useRouter();
+const userEmail = ref('');
+const pfpColor = ref('');
+
+const userPfp = computed(() => (userEmail.value || '').slice(0, 2));
 
 async function handleSignOut() {
   await signOut();
   router.push('/sign-in');
 }
+
+onMounted(async () => {
+  const user = await getCurrentUser();
+  userEmail.value = user?.email || '';
+  pfpColor.value = generateHexColor();
+});
 </script>
 
 <template>
   <nav class="nav">
     <div class="nav-left">Landmarks 2025 📍</div>
     <div class="nav-right">
-      <div class="nav-right__text">Log out</div>
+      <div class="nav-right__profile-pic">
+        <div class="nav-right__profile-pic-text">{{ userPfp }}</div>
+      </div>
+
       <button class="nav-right__button" @click="handleSignOut">
         <IconSignOut :color="'var(--color-icon)'" :width="'20px'" :height="'20px'"></IconSignOut>
       </button>
@@ -43,6 +59,21 @@ async function handleSignOut() {
   align-items: flex-start;
 }
 
+.nav-right__profile-pic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: v-bind(pfpColor);
+}
+
+.nav-right__profile-pic-text {
+  user-select: none;
+  color: var(--button-text-color);
+  letter-spacing: 1px;
+}
 .nav-right__button {
   background-color: transparent;
   border: none;
