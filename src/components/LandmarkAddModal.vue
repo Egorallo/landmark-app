@@ -88,6 +88,7 @@ async function addNewLandmark(landmark: Landmark) {
   landmark.images = compressedImages;
 
   await landmarksStore.addLandmark(landmark);
+  await landmarksStore.fetchLandmarks();
 }
 
 function handleNewMarker({ fl, lat, lng }: { fl: boolean; lat: number; lng: number }) {
@@ -227,6 +228,7 @@ const canAdd = computed(() => {
 
 .description {
   resize: none;
+  font-family: 'Mulish', serif;
 }
 .modal-body__input__file__container {
   width: 100%;

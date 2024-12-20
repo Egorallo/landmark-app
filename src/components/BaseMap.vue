@@ -9,6 +9,7 @@ import { useLocationStore } from '@/stores/location';
 
 const mapContainer = ref<HTMLElement | null>(null);
 const mapInstance = ref<L.Map | null>(null);
+const userLocationMaker = ref<L.Marker | null>(null);
 const userLocationIcon = ref();
 const currentMarker = ref<L.Marker | null>(null);
 const markerClusterGroup = ref<L.MarkerClusterGroup | null>(null);
@@ -22,6 +23,18 @@ interface Props {
 const props = defineProps<Props>();
 const emits = defineEmits(['placedMarker', 'openedLandmarkViewModal']);
 
+function zoomToLandmark(id: string) {
+  if (!mapInstance.value || !markerMap.value[id]) return;
+  const marker = markerMap.value[id];
+  const zoomLevel = 20;
+
+  mapInstance.value.setView(marker.getLatLng(), zoomLevel);
+}
+
+defineExpose({
+  zoomToLandmark,
+});
+
 const locationStore = useLocationStore();
 
 onMounted(async () => {
@@ -33,15 +46,21 @@ onMounted(async () => {
   tileLayer.addTo(mapInstance.value as Map);
 
   markerClusterGroup.value = L.markerClusterGroup();
+
   markerClusterGroup.value.addTo(mapInstance.value as Map);
 
   if (!locationStore.isLocationFetched) {
     await locationStore.fetchLocation();
     console.log('location fetched');
   }
+
   addLandmarkMarkers();
 
   if (locationStore.lat && locationStore.long) {
+    if (userLocationMaker.value) {
+      mapInstance.value.removeLayer(userLocationMaker.value as L.Marker);
+    }
+
     mapInstance.value.setView([locationStore.lat, locationStore.long], 13);
 
     userLocationIcon.value = L.icon({
@@ -49,9 +68,12 @@ onMounted(async () => {
       iconSize: [35, 35],
     });
 
-    L.marker([locationStore.lat, locationStore.long], { icon: userLocationIcon.value }).addTo(
-      mapInstance.value as Map,
-    );
+    userLocationMaker.value = L.marker([locationStore.lat, locationStore.long], {
+      icon: userLocationIcon.value,
+    });
+    userLocationMaker.value.addTo(mapInstance.value as Map);
+
+    userLocationMaker.value.bindPopup('You are here');
   }
 
   if (props.addMarkers) {
@@ -95,14 +117,6 @@ function addLandmarkMarkers() {
   });
 }
 
-function zoomToLandmark(id: string) {
-  if (!mapInstance.value || !markerMap.value[id]) return;
-  const marker = markerMap.value[id];
-  const zoomLevel = 20;
-
-  mapInstance.value.setView(marker.getLatLng(), zoomLevel);
-}
-
 watch(
   () => props.landmarkMarkers,
   () => {
@@ -110,10 +124,6 @@ watch(
   },
   { deep: true },
 );
-
-defineExpose({
-  zoomToLandmark,
-});
 </script>
 
 <template>

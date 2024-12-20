@@ -56,13 +56,20 @@ function loadMoreLandmarks() {
 <template>
   <div class="landmarks-list">
     <div class="landmarks-list__header">
-      <div class="landmarks-list__header__title">Top 10 Places</div>
-      <input
-        class="landmarks-list__header__checkbox"
-        type="checkbox"
-        v-model="showOnlyUserLandmarks"
-      />
-      <label class="landmarks-list__header__label">Show only my landmarks</label>
+      <div class="landmarks-list__heder__left">
+        <div class="landmarks-list__header__title">Top 10 Places</div>
+        <input
+          class="landmarks-list__header__checkbox"
+          type="checkbox"
+          v-model="showOnlyUserLandmarks"
+        />
+        <label class="landmarks-list__header__label">Show only my landmarks</label>
+      </div>
+      <div class="landmarks-list__header__right">
+        <BaseButton custom-styles="custom-b-class" @click="openModal"
+          >Add new landmark +</BaseButton
+        >
+      </div>
     </div>
     <div class="landmarks-list__container" v-if="landmarks.length">
       <LandmarksListItem
@@ -75,7 +82,6 @@ function loadMoreLandmarks() {
     </div>
     <div v-else>No landmarks available.</div>
 
-    <BaseButton custom-styles="custom-b-class" @click="openModal">Add new landmark +</BaseButton>
     <Transition name="fade">
       <LandmarkAddModal
         v-if="isModalOpened"
@@ -107,7 +113,12 @@ function loadMoreLandmarks() {
   opacity: 0;
 }
 .custom-b-class {
-  width: 50%;
+  width: 100%;
+}
+
+.landmarks-list__header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .landmarks-list__title {
@@ -122,18 +133,17 @@ function loadMoreLandmarks() {
 }
 
 .landmarks-list {
-  /* border: 1px solid red; */
-  overflow: auto;
+  padding: 0px 10px 10px 10px;
 }
+
 .landmarks-list__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 5px;
-  height: 700px;
+  height: 830px;
   overflow: auto;
   margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 @media (max-width: 750px) {

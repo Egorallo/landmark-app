@@ -57,26 +57,44 @@ const signInAcc = async () => {
 </script>
 
 <template>
-  <main class="sign-form">
+  <main class="sign-form__main">
     <section class="sign-form__container">
       <h1 class="sign-form__title sign-form__title_text">{{ signTitle }}</h1>
       <form class="sign-form__form" @submit.prevent="signInAcc">
-        <input class="sign-form__input" v-model="email" placeholder="Email" autocomplete="email" />
-        <input
-          class="sign-form__input"
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          autocomplete="password"
-        />
-        <template v-if="!newAcc">
+        <div class="sign-form email">
+          <label for="email" class="sign-form__label">Email</label>
           <input
+            id="email"
             class="sign-form__input"
-            v-model="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-            autocomplete="confirm-password"
+            v-model="email"
+            placeholder="Your email"
+            autocomplete="email"
           />
+        </div>
+        <div class="sign-form password">
+          <label for="password" class="sign-form__label">Password</label>
+          <input
+            id="password"
+            class="sign-form__input"
+            v-model="password"
+            type="password"
+            placeholder="Your password"
+            autocomplete="password"
+          />
+        </div>
+
+        <template v-if="!newAcc">
+          <div class="sign-form confirm-password">
+            <label for="confirm-password" class="sign-form__label">Confirm Password</label>
+            <input
+              id="confirm-password"
+              class="sign-form__input"
+              v-model="confirmPassword"
+              type="password"
+              placeholder="Reenter the password"
+              autocomplete="confirm-password"
+            />
+          </div>
         </template>
 
         <button class="sign-form__button" type="submit">{{ signButtonTitle }}</button>
@@ -106,10 +124,16 @@ const signInAcc = async () => {
 </template>
 
 <style scoped>
-.sign-form {
+.sign-form__main {
   max-width: 400px;
   width: 100%;
   margin: 200px auto 0;
+}
+
+.sign-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
 }
 
 .sign-form__title_text {
@@ -144,6 +168,7 @@ const signInAcc = async () => {
   box-sizing: border-box;
   background-color: var(--bg-color-form);
   color: var(--text-main-color);
+  outline: none;
 }
 
 .sign-form__input::placeholder {

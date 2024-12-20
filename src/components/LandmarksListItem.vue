@@ -24,14 +24,14 @@ defineProps<Props>();
 
 <style scoped>
 .landmarks-list-item {
-  width: 95%;
+  width: 100%;
   padding-left: 10px;
   display: flex;
   justify-content: flex-start;
   column-gap: 20px;
   transition: background-color 0.3s ease;
   border-radius: 8px;
-  min-height: 120px;
+  max-height: 120px;
 }
 
 .landmarks-list-item:hover {

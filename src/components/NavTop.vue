@@ -45,6 +45,7 @@ onMounted(async () => {
   justify-content: space-between;
   width: 100%;
   height: 30px;
+  margin-bottom: 9px;
 }
 
 .nav-left {

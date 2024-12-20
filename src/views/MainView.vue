@@ -46,6 +46,7 @@ watch(landmarks, (newLandmarks) => {
       @opened-landmark-view-modal="openLandmarkViewModal"
       ref="baseMap"
     />
+
     <LandmarksList
       :landmark-markers="landmarkMarkers"
       :landmarks="landmarks"
