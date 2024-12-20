@@ -83,7 +83,8 @@ async function addNewLandmark(landmark: Landmark) {
       return;
     }
   }
-  landmark.totalRating = landmark.rating;
+  landmark.userRating = +landmark.rating;
+  landmark.totalRating = +landmark.rating;
 
   landmark.images = compressedImages;
 

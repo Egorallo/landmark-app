@@ -73,9 +73,9 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     }
     console.log('from store ', landmarkId);
     const updatedData = {
-      rating: (landmark.totalRating + rating) / (landmark.visitors + 1),
-      totalRating: landmark.totalRating + rating,
-      visitors: landmark.visitors + 1,
+      rating: (+landmark.totalRating + +rating) / (+landmark.visitors + 1),
+      totalRating: +landmark.totalRating + +rating,
+      visitors: +landmark.visitors + 1,
     };
     const res = await updLandmarkRating(userId.value, landmarkUserId, landmarkId, updatedData);
     return res;

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
-import { ref } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useLandmarksStore } from '@/stores/landmarks';
+import { useUserStore } from '@/stores/user';
 
 interface Props {
   isModalOpened: boolean;
@@ -11,24 +12,42 @@ interface Props {
 
 const props = defineProps<Props>();
 const emits = defineEmits(['modal-close-button']);
-const landmarksStore = useLandmarksStore();
 
-const newRating = ref(5);
+const editedLandmark = reactive<Partial<Landmark>>({
+  userRating: props.landmark.userRating,
+  name: props.landmark.name,
+  description: props.landmark.description,
+});
+
+const landmarksStore = useLandmarksStore();
+const userStore = useUserStore();
+
+const canEdit = ref(false);
+const newRating = ref<number>(5);
 
 async function updateLandmarkRating(newRating: number) {
-  const res = await landmarksStore.updateLandmarkRating(
-    props.landmark.id!,
-    props.landmark.userId,
-    +newRating,
-  );
-  if (res) {
-    console.log('Rating updated successfully');
-    await landmarksStore.fetchLandmarks();
-    props.closeModal();
+  if (!canEdit.value) {
+    const res = await landmarksStore.updateLandmarkRating(
+      props.landmark.id!,
+      props.landmark.userId,
+      +newRating,
+    );
+    if (res) {
+      console.log('Rating updated successfully');
+      await landmarksStore.fetchLandmarks();
+      props.closeModal();
+    } else {
+      console.log('Rating update failed');
+    }
   } else {
-    console.log('Rating update failed');
+    await landmarksStore.updateLandmark(props.landmark.id!, editedLandmark);
   }
 }
+
+onMounted(() => {
+  canEdit.value = userStore.userId === props.landmark.userId;
+  console.log(canEdit.value);
+});
 </script>
 
 <template>
@@ -57,15 +76,31 @@ async function updateLandmarkRating(newRating: number) {
         </div>
         <div class="modal-body__user__rating">
           <p>Current Rating: ⭐ {{ landmark.rating }}</p>
+          <p>Landmark owner's rating: ⭐ {{ landmark.userRating }}</p>
         </div>
-        <div class="modlal-body__description">
-          <p>{{ landmark.description }}</p>
-        </div>
-        <div class="modal-body__rating__container">
-          <label for="rating">How you like it: </label>
+        <div class="modal-body__edit" v-if="canEdit">
+          <p class="modal-body__title">You can edit this landmark because you're the owner</p>
+          <label for="title">Title</label>
+          <input
+            id="title"
+            class="modal-body__input title"
+            type="text"
+            v-model="editedLandmark.name"
+            placeholder="Name"
+            maxlength="40"
+          />
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            class="modal-body__input description"
+            v-model="editedLandmark.description"
+            placeholder="Description"
+            maxlength="120"
+          />
+          <label for="rating">Rating</label>
           <select
             class="modal-body__input rating"
-            v-model="newRating"
+            v-model="editedLandmark.userRating"
             name="ratingValue"
             id="rating"
           >
@@ -75,6 +110,26 @@ async function updateLandmarkRating(newRating: number) {
             <option value="4">⭐⭐⭐⭐</option>
             <option value="5">⭐⭐⭐⭐⭐</option>
           </select>
+        </div>
+        <div v-else>
+          <div class="modlal-body__description">
+            <p>{{ landmark.description }}</p>
+          </div>
+          <div class="modal-body__rating__container">
+            <label for="rating">How you like it: </label>
+            <select
+              class="modal-body__input rating"
+              v-model="newRating"
+              name="ratingValue"
+              id="rating"
+            >
+              <option value="1">⭐</option>
+              <option value="2">⭐⭐</option>
+              <option value="3">⭐⭐⭐</option>
+              <option value="4">⭐⭐⭐⭐</option>
+              <option value="5">⭐⭐⭐⭐⭐</option>
+            </select>
+          </div>
         </div>
       </div>
     </template>
@@ -107,6 +162,12 @@ async function updateLandmarkRating(newRating: number) {
   margin-bottom: 10px;
 }
 
+.modal-body__title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--button-main-color);
+}
+
 .modal-body__image__container {
   display: flex;
   flex-direction: row;
@@ -130,7 +191,23 @@ async function updateLandmarkRating(newRating: number) {
   background-color: var(--bg-color-calendar-hover);
 }
 
+.title {
+  outline: none;
+}
+
+.description {
+  resize: none;
+  outline: none;
+  font-family: 'Mulish', serif;
+}
+
 .rating:focus {
   outline: none;
+}
+
+.modal-body__edit {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
 }
 </style>
