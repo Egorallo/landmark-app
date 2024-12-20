@@ -25,6 +25,11 @@ const toastsStore = useToastsStore();
 const signInAcc = async () => {
   error.value = null;
 
+  if (route.path === '/sign-up' && password.value !== confirmPassword.value) {
+    error.value = 'Passwords do not match.';
+    return;
+  }
+
   if (route.path === '/sign-in') {
     signmessage.value = 'Signing you in...';
     const result = await signIn(email.value, password.value);
@@ -64,7 +69,7 @@ const signInAcc = async () => {
           placeholder="Password"
           autocomplete="password"
         />
-        <template v-if="newAcc">
+        <template v-if="!newAcc">
           <input
             class="sign-form__input"
             v-model="confirmPassword"
