@@ -140,12 +140,13 @@ const canAdd = computed(() => {
           type="text"
           v-model="newLandmark.name"
           placeholder="Name"
+          maxlength="40"
         />
         <textarea
           class="modal-body__input description"
           v-model="newLandmark.description"
           placeholder="Description"
-          maxlength="80"
+          maxlength="120"
         />
         <label for="rating">Rating</label>
         <select

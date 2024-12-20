@@ -6,6 +6,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import userLocationIconUrl from './icons/user_location.svg';
 import { useLocationStore } from '@/stores/location';
+import { useToastsStore } from '@/stores/toasts';
 
 const mapContainer = ref<HTMLElement | null>(null);
 const mapInstance = ref<L.Map | null>(null);
@@ -35,6 +36,7 @@ defineExpose({
   zoomToLandmark,
 });
 
+const toastsStore = useToastsStore();
 const locationStore = useLocationStore();
 
 onMounted(async () => {
@@ -48,33 +50,6 @@ onMounted(async () => {
   markerClusterGroup.value = L.markerClusterGroup();
 
   markerClusterGroup.value.addTo(mapInstance.value as Map);
-
-  if (!locationStore.isLocationFetched) {
-    await locationStore.fetchLocation();
-    console.log('location fetched');
-  }
-
-  addLandmarkMarkers();
-
-  if (locationStore.lat && locationStore.long) {
-    if (userLocationMaker.value) {
-      mapInstance.value.removeLayer(userLocationMaker.value as L.Marker);
-    }
-
-    mapInstance.value.setView([locationStore.lat, locationStore.long], 13);
-
-    userLocationIcon.value = L.icon({
-      iconUrl: userLocationIconUrl,
-      iconSize: [35, 35],
-    });
-
-    userLocationMaker.value = L.marker([locationStore.lat, locationStore.long], {
-      icon: userLocationIcon.value,
-    });
-    userLocationMaker.value.addTo(mapInstance.value as Map);
-
-    userLocationMaker.value.bindPopup('You are here');
-  }
 
   if (props.addMarkers) {
     mapInstance.value.on('click', (e) => {
@@ -97,6 +72,36 @@ onMounted(async () => {
 
       marker.addTo(mapInstance.value as Map);
     });
+  }
+
+  if (!locationStore.isLocationFetched) {
+    try {
+      await locationStore.fetchLocation();
+    } catch (_) {
+      toastsStore.addToast('Failed to fetch user location');
+    }
+  }
+
+  addLandmarkMarkers();
+
+  if (locationStore.lat && locationStore.long) {
+    if (userLocationMaker.value) {
+      mapInstance.value.removeLayer(userLocationMaker.value as L.Marker);
+    }
+
+    mapInstance.value.setView([locationStore.lat, locationStore.long], 13);
+
+    userLocationIcon.value = L.icon({
+      iconUrl: userLocationIconUrl,
+      iconSize: [35, 35],
+    });
+
+    userLocationMaker.value = L.marker([locationStore.lat, locationStore.long], {
+      icon: userLocationIcon.value,
+    });
+    userLocationMaker.value.addTo(mapInstance.value as Map);
+
+    userLocationMaker.value.bindPopup('You are here');
   }
 });
 
