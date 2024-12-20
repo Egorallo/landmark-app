@@ -1,4 +1,4 @@
-import { auth } from './firebaseInit';
+import { auth, db } from './firebaseInit';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
   type User,
   type UserCredential,
 } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { ERROR_MESSAGES } from '../constants/errors';
 
 type ErrorCode = keyof typeof ERROR_MESSAGES;
@@ -66,5 +67,20 @@ export async function signOut() {
     await fireSignOut(auth);
   } catch (error) {
     passError(error);
+  }
+}
+
+export async function checkIfAdmin(userId: string): Promise<boolean> {
+  try {
+    const userDocRef = doc(db, 'users', userId);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      return !!userData.isAdmin;
+    }
+    return false;
+  } catch (_) {
+    return false;
   }
 }

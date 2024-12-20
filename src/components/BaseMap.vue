@@ -42,7 +42,7 @@ const locationStore = useLocationStore();
 onMounted(async () => {
   if (!mapContainer.value) return;
 
-  mapInstance.value = L.map(mapContainer.value).setView([51.505, -0.09], 3);
+  mapInstance.value = L.map(mapContainer.value, { zoomControl: false }).setView([51.505, -0.09], 3);
 
   const tileLayer: TileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
   tileLayer.addTo(mapInstance.value as Map);
@@ -74,7 +74,7 @@ onMounted(async () => {
     });
   }
 
-  if (!locationStore.isLocationFetched) {
+  if (!locationStore.isLocationFetched || !props.addMarkers) {
     try {
       await locationStore.fetchLocation();
     } catch (_) {

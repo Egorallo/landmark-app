@@ -19,6 +19,7 @@ onMounted(() => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       userStore.initializeUser();
+      console.log(userStore.isAdmin);
       isLogged.value = true;
     } else {
       isLogged.value = false;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
+import BaseButton from './BaseButton.vue';
 import { ref, onMounted, reactive } from 'vue';
 import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
@@ -21,6 +22,8 @@ const editedLandmark = reactive<Partial<Landmark>>({
 
 const landmarksStore = useLandmarksStore();
 const userStore = useUserStore();
+
+const isUserAdmin = ref(false);
 
 const canEdit = ref(false);
 const newRating = ref<number>(5);
@@ -44,15 +47,22 @@ async function updateLandmarkRating(newRating: number) {
   }
 }
 
+function adminDeleteLandmark() {
+  landmarksStore.deleteLandmark(props.landmark.userId, props.landmark.id!);
+  props.closeModal();
+}
+
 onMounted(() => {
   canEdit.value = userStore.userId === props.landmark.userId;
   console.log(canEdit.value);
+  isUserAdmin.value = userStore.isAdmin;
+  console.log('from modal ', isUserAdmin.value);
 });
 </script>
 
 <template>
   <BaseModal
-    :button-text="'Set new rating'"
+    :button-text="'Save changes'"
     :is-open="isModalOpened"
     @submit="updateLandmarkRating(newRating)"
     @modal-close="closeModal"
@@ -78,8 +88,11 @@ onMounted(() => {
           <p>Current Rating: ⭐ {{ landmark.rating }}</p>
           <p>Landmark owner's rating: ⭐ {{ landmark.userRating }}</p>
         </div>
-        <div class="modal-body__edit" v-if="canEdit">
-          <p class="modal-body__title">You can edit this landmark because you're the owner</p>
+        <div class="modal-body__edit" v-if="canEdit || isUserAdmin">
+          <p class="modal-body__title">
+            You can edit this landmark because you're the
+            {{ isUserAdmin ? 'ADMIN' : 'owner' }}
+          </p>
           <label for="title">Title</label>
           <input
             id="title"
@@ -97,19 +110,24 @@ onMounted(() => {
             placeholder="Description"
             maxlength="120"
           />
-          <label for="rating">Rating</label>
-          <select
-            class="modal-body__input rating"
-            v-model="editedLandmark.userRating"
-            name="ratingValue"
-            id="rating"
+          <template v-if="!isUserAdmin">
+            <label for="rating">Rating</label>
+            <select
+              class="modal-body__input rating"
+              v-model="editedLandmark.userRating"
+              name="ratingValue"
+              id="rating"
+            >
+              <option value="1">⭐</option>
+              <option value="2">⭐⭐</option>
+              <option value="3">⭐⭐⭐</option>
+              <option value="4">⭐⭐⭐⭐</option>
+              <option value="5">⭐⭐⭐⭐⭐</option>
+            </select>
+          </template>
+          <BaseButton :custom-styles="'custom-btn-delete'" @click="adminDeleteLandmark"
+            >Delete</BaseButton
           >
-            <option value="1">⭐</option>
-            <option value="2">⭐⭐</option>
-            <option value="3">⭐⭐⭐</option>
-            <option value="4">⭐⭐⭐⭐</option>
-            <option value="5">⭐⭐⭐⭐⭐</option>
-          </select>
         </div>
         <div v-else>
           <div class="modlal-body__description">
@@ -209,5 +227,12 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
+}
+
+.custom-btn-delete {
+  background-color: var(--button-delete-color);
+  color: var(--button-text-color);
+  cursor: pointer;
+  transition: all 0.4s ease;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 // import { storeToRefs } from 'pinia';
 import LandmarksListItem from './LandmarksListItem.vue';
 import BaseButton from './BaseButton.vue';
@@ -41,6 +41,8 @@ const closeLandmarkViewModal = () => {
 
 const userStore = useUserStore();
 
+const isUserAdmin = ref(false);
+
 const userId = userStore.userId;
 const showOnlyUserLandmarks = ref(false);
 
@@ -51,6 +53,10 @@ const displayedLandmarks = computed(() => {
 function loadMoreLandmarks() {
   console.log('loading more landmarks');
 }
+onMounted(() => {
+  isUserAdmin.value = userStore.isAdmin;
+  console.log(isUserAdmin.value);
+});
 </script>
 
 <template>
@@ -66,7 +72,7 @@ function loadMoreLandmarks() {
         <label class="landmarks-list__header__label">Show only my landmarks</label>
       </div>
       <div class="landmarks-list__header__right">
-        <BaseButton custom-styles="custom-b-class" @click="openModal"
+        <BaseButton custom-styles="custom-b-class" @click="openModal" :disabled="!isUserAdmin"
           >Add new landmark +</BaseButton
         >
       </div>
@@ -98,6 +104,7 @@ function loadMoreLandmarks() {
         :is-modal-opened="isLandmarkViewModalOpened"
         :close-modal="closeLandmarkViewModal"
         :landmark="currentViewingLandmark!"
+        :is-user-admin="isUserAdmin"
       ></LandmarkItemModal>
     </Transition>
   </div>

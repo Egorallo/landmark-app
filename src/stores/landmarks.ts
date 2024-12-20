@@ -40,15 +40,16 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     landmarks.value = [...landmarks.value, newLandmark];
   }
 
-  async function deleteLandmark(landmarkId: string) {
-    if (!userId.value) {
-      return;
-    }
+  async function deleteLandmark(delLamdmarkUserId: string, landmarkId: string) {
+    // if (!userId.value) {
+    //   return;
+    // }
     landmarks.value = landmarks.value.filter((landmark) => landmark.id !== landmarkId);
 
     try {
-      await removeLandmark(userId.value, landmarkId);
+      await removeLandmark(delLamdmarkUserId, landmarkId);
     } catch (_) {
+      console.error('Failed to delete landmark');
       const fetchedLandmarks = await getAllLandmarks();
       landmarks.value = fetchedLandmarks;
     }

@@ -57,12 +57,17 @@ function handleSubmitAndClose() {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .modal-container {
+  position: relative;
   max-width: 450px;
+  max-height: 90vh;
+  z-index: 11111;
+  overflow-y: auto;
   margin: 50px auto;
   padding: 20px 30px;
   background-color: var(--bg-color);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  overflow-y: auto;
 }
 
 @media (max-width: 750px) {

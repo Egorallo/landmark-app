@@ -123,7 +123,7 @@ const canAdd = computed(() => {
   >
     <template #header>
       <div class="modal-header">
-        <h3>Add new landmark</h3>
+        <h3 class="modal-hedaer__text">Add new landmark</h3>
         <button class="modal-header__button" @click="emits('modal-close-button')">❌</button>
       </div>
     </template>
@@ -189,7 +189,7 @@ const canAdd = computed(() => {
 
 <style scoped>
 .mappa {
-  height: 400px;
+  min-height: 300px;
 }
 
 .modal-header {
@@ -226,11 +226,17 @@ const canAdd = computed(() => {
 
 .title {
   font-family: 'Mulish', serif;
+  outline: none;
 }
 
 .description {
   resize: none;
   font-family: 'Mulish', serif;
+  outline: none;
+}
+
+.rating {
+  outline: none;
 }
 .modal-body__input__file__container {
   width: 100%;
