@@ -2,11 +2,15 @@
 import BaseMap from '@/components/BaseMap.vue';
 import LandmarksList from '@/components/LandmarksList.vue';
 import { useLandmarksStore } from '@/stores/landmarks';
+import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import LandmarkItemModal from '@/components/LandmarkItemModal.vue';
+import { checkIfAdmin } from '@/services/authService';
 
 const landmarksStore = useLandmarksStore();
+const userStore = useUserStore();
+
 const { landmarks, landmarksByUserId } = storeToRefs(landmarksStore);
 
 const landmarkMarkers = ref<{ id: string; lat: number; lng: number }[]>([]);
@@ -21,6 +25,8 @@ const closeLandmarkViewModal = () => {
   isLandmarkViewModalOpened.value = false;
 };
 
+const isUserAdmin = ref(false);
+
 const baseMap = ref();
 
 function zoomToLandmark(landmarkId: string) {
@@ -29,6 +35,10 @@ function zoomToLandmark(landmarkId: string) {
     console.log('zooming to landmark', landmarkId);
   }
 }
+
+onMounted(async () => {
+  isUserAdmin.value = await checkIfAdmin(userStore.userId!);
+});
 
 watch(landmarks, (newLandmarks) => {
   console.log('updateddada');
@@ -59,6 +69,7 @@ watch(landmarks, (newLandmarks) => {
         :is-modal-opened="isLandmarkViewModalOpened"
         :close-modal="closeLandmarkViewModal"
         :landmark="currentViewingLandmark!"
+        :is-user-admin="isUserAdmin"
       ></LandmarkItemModal>
     </Transition>
   </div>

@@ -64,7 +64,7 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     landmarks.value = landmarks.value.map((landmark) =>
       landmark.id === landmarkId ? { ...landmark, ...updatedData } : landmark,
     );
-    await updLandmark(userId.value, landmarkId, updatedData);
+    await updLandmark(updatedData.userId!, landmarkId, updatedData);
   }
 
   async function updateLandmarkRating(landmarkId: string, landmarkUserId: string, rating: number) {

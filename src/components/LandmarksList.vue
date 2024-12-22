@@ -1,13 +1,12 @@
 <script setup lang="ts">
-// import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
 import { ref, computed, onMounted } from 'vue';
-// import { storeToRefs } from 'pinia';
 import LandmarksListItem from './LandmarksListItem.vue';
 import BaseButton from './BaseButton.vue';
 import LandmarkAddModal from './LandmarkAddModal.vue';
 import LandmarkItemModal from './LandmarkItemModal.vue';
 import TriggerLoad from './TriggerLoad.vue';
+import { checkIfAdmin } from '@/services/authService';
 
 interface Props {
   landmarks: Landmark[];
@@ -53,9 +52,10 @@ const displayedLandmarks = computed(() => {
 function loadMoreLandmarks() {
   console.log('loading more landmarks');
 }
-onMounted(() => {
-  isUserAdmin.value = userStore.isAdmin;
+onMounted(async () => {
+  isUserAdmin.value = await checkIfAdmin(userId!);
   console.log(isUserAdmin.value);
+  console.log(userId);
 });
 </script>
 
@@ -72,7 +72,7 @@ onMounted(() => {
         <label class="landmarks-list__header__label">Show only my landmarks</label>
       </div>
       <div class="landmarks-list__header__right">
-        <BaseButton custom-styles="custom-b-class" @click="openModal" :disabled="!isUserAdmin"
+        <BaseButton custom-styles="custom-b-class" @click="openModal" :disabled="isUserAdmin"
           >Add new landmark +</BaseButton
         >
       </div>

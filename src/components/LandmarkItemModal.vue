@@ -9,12 +9,14 @@ interface Props {
   isModalOpened: boolean;
   closeModal: () => void;
   landmark: Landmark;
+  isUserAdmin: boolean;
 }
 
 const props = defineProps<Props>();
 const emits = defineEmits(['modal-close-button']);
 
 const editedLandmark = reactive<Partial<Landmark>>({
+  userId: props.landmark.userId,
   userRating: props.landmark.userRating,
   name: props.landmark.name,
   description: props.landmark.description,
@@ -23,13 +25,11 @@ const editedLandmark = reactive<Partial<Landmark>>({
 const landmarksStore = useLandmarksStore();
 const userStore = useUserStore();
 
-const isUserAdmin = ref(false);
-
 const canEdit = ref(false);
 const newRating = ref<number>(5);
 
 async function updateLandmarkRating(newRating: number) {
-  if (!canEdit.value) {
+  if (!canEdit.value && !props.isUserAdmin) {
     const res = await landmarksStore.updateLandmarkRating(
       props.landmark.id!,
       props.landmark.userId,
@@ -52,11 +52,11 @@ function adminDeleteLandmark() {
   props.closeModal();
 }
 
-onMounted(() => {
+onMounted(async () => {
   canEdit.value = userStore.userId === props.landmark.userId;
   console.log(canEdit.value);
-  isUserAdmin.value = userStore.isAdmin;
-  console.log('from modal ', isUserAdmin.value);
+
+  console.log('from modal ', props.isUserAdmin);
 });
 </script>
 
@@ -88,10 +88,10 @@ onMounted(() => {
           <p>Current Rating: ⭐ {{ landmark.rating }}</p>
           <p>Landmark owner's rating: ⭐ {{ landmark.userRating }}</p>
         </div>
-        <div class="modal-body__edit" v-if="canEdit || isUserAdmin">
+        <div class="modal-body__edit" v-if="canEdit || props.isUserAdmin">
           <p class="modal-body__title">
             You can edit this landmark because you're the
-            {{ isUserAdmin ? 'ADMIN' : 'owner' }}
+            {{ props.isUserAdmin ? 'ADMIN' : 'owner' }}
           </p>
           <label for="title">Title</label>
           <input
@@ -110,7 +110,7 @@ onMounted(() => {
             placeholder="Description"
             maxlength="120"
           />
-          <template v-if="!isUserAdmin">
+          <template v-if="!props.isUserAdmin">
             <label for="rating">Rating</label>
             <select
               class="modal-body__input rating"
