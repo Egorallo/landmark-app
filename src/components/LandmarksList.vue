@@ -107,6 +107,7 @@ onMounted(async () => {
         :close-modal="closeLandmarkViewModal"
         :landmark="currentViewingLandmark!"
         :is-user-admin="isUserAdmin"
+        @modal-close-button="closeLandmarkViewModal"
       ></LandmarkItemModal>
     </Transition>
   </div>

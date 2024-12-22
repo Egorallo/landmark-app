@@ -134,9 +134,12 @@ onMounted(async () => {
               <option value="5">⭐⭐⭐⭐⭐</option>
             </select>
           </template>
-          <BaseButton :custom-styles="'custom-btn-delete'" @click="adminDeleteLandmark">{{
-            $t('common.button-delete')
-          }}</BaseButton>
+          <BaseButton
+            v-if="props.isUserAdmin"
+            :custom-styles="'custom-btn-delete'"
+            @click="adminDeleteLandmark"
+            >{{ $t('common.button-delete') }}</BaseButton
+          >
         </div>
         <div v-else>
           <div class="modlal-body__description">
