@@ -1,7 +1,7 @@
 <template>
   <main class="not-found">
-    <h1 class="not-found__text">This is not what you are looking for</h1>
-    <router-link class="not-found__link" to="/">Go back to the main page</router-link>
+    <h1 class="not-found__text">{{ $t('notFound.header') }}</h1>
+    <router-link class="not-found__link" to="/">{{ $t('notFound.link') }}</router-link>
   </main>
 </template>
 

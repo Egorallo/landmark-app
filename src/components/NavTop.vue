@@ -28,6 +28,10 @@ onMounted(async () => {
   <nav class="nav">
     <div class="nav-left">Landmarks 2025 📍</div>
     <div class="nav-right">
+      <select class="nav-right__lang" v-model="$i18n.locale">
+        <option value="en">En</option>
+        <option value="ru">Ru</option>
+      </select>
       <div class="nav-right__profile-pic">
         <div class="nav-right__profile-pic-text">{{ userPfp }}</div>
       </div>
@@ -58,6 +62,14 @@ onMounted(async () => {
   gap: 10px;
   font-size: 14px;
   align-items: flex-start;
+}
+
+.nav-right__lang {
+  background-color: var(--bg-color-calendar-selected);
+  border: 1px solid var(--border-calendar-color);
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
 }
 
 .nav-right__profile-pic {

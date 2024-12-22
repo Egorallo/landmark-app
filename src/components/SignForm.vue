@@ -62,36 +62,38 @@ const signInAcc = async () => {
       <h1 class="sign-form__title sign-form__title_text">{{ signTitle }}</h1>
       <form class="sign-form__form" @submit.prevent="signInAcc">
         <div class="sign-form email">
-          <label for="email" class="sign-form__label">Email</label>
+          <label for="email" class="sign-form__label">{{ $t('signForm.email') }}</label>
           <input
             id="email"
             class="sign-form__input"
             v-model="email"
-            placeholder="Your email"
+            :placeholder="$t('signForm.emailPlaceholder')"
             autocomplete="email"
           />
         </div>
         <div class="sign-form password">
-          <label for="password" class="sign-form__label">Password</label>
+          <label for="password" class="sign-form__label">{{ $t('signForm.password') }}</label>
           <input
             id="password"
             class="sign-form__input"
             v-model="password"
             type="password"
-            placeholder="Your password"
+            :placeholder="$t('signForm.passwordPlaceholder')"
             autocomplete="password"
           />
         </div>
 
         <template v-if="!newAcc">
           <div class="sign-form confirm-password">
-            <label for="confirm-password" class="sign-form__label">Confirm Password</label>
+            <label for="confirm-password" class="sign-form__label">{{
+              $t('signForm.confirm')
+            }}</label>
             <input
               id="confirm-password"
               class="sign-form__input"
               v-model="confirmPassword"
               type="password"
-              placeholder="Reenter the password"
+              :placeholder="$t('signForm.confirmPlaceholder')"
               autocomplete="confirm-password"
             />
           </div>
@@ -108,14 +110,18 @@ const signInAcc = async () => {
       <div class="sign-form__other">
         <div v-if="newAcc">
           <p>
-            Don't have an account?
-            <RouterLink to="/sign-up" class="sign-form__link">Sign Up</RouterLink>
+            {{ $t('signForm.dontHave') }}
+            <RouterLink to="/sign-up" class="sign-form__link">{{
+              $t('signForm.signUp')
+            }}</RouterLink>
           </p>
         </div>
         <div v-else>
           <p>
-            Already have an account?
-            <RouterLink to="/sign-in" class="sign-form__link">Sign In</RouterLink>
+            {{ $t('signForm.have') }}
+            <RouterLink to="/sign-in" class="sign-form__link">{{
+              $t('signForm.signIn')
+            }}</RouterLink>
           </p>
         </div>
       </div>

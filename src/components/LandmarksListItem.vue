@@ -16,7 +16,9 @@ defineProps<Props>();
       <div class="landmarks-list-item__name">
         {{ landmark.name }}
       </div>
-      <div class="landmarks-list-item__rating">Rating: {{ landmark.rating }} ⭐</div>
+      <div class="landmarks-list-item__rating">
+        {{ $t('landmarksListItem.rating') }} {{ landmark.rating }} ⭐
+      </div>
       <div>Score: {{ evaluateScore(landmark.rating, landmark.visitors) }}</div>
     </div>
   </div>

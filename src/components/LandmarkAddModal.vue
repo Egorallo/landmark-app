@@ -123,7 +123,7 @@ const canAdd = computed(() => {
   >
     <template #header>
       <div class="modal-header">
-        <h3 class="modal-hedaer__text">Add new landmark</h3>
+        <h3 class="modal-hedaer__text">{{ $t('landmarkAddModal.header') }}</h3>
         <button class="modal-header__button" @click="emits('modal-close-button')">❌</button>
       </div>
     </template>
@@ -140,16 +140,16 @@ const canAdd = computed(() => {
           class="modal-body__input title"
           type="text"
           v-model="newLandmark.name"
-          placeholder="Name"
+          :placeholder="$t('common.name')"
           maxlength="40"
         />
         <textarea
           class="modal-body__input description"
           v-model="newLandmark.description"
-          placeholder="Description"
+          :placeholder="$t('common.description')"
           maxlength="120"
         />
-        <label for="rating">Rating</label>
+        <label for="rating">{{ $t('landmarkAddModal.rating') }}</label>
         <select
           class="modal-body__input rating"
           v-model="newLandmark.rating"
@@ -169,7 +169,7 @@ const canAdd = computed(() => {
             @dragover.prevent
             @drop="handleDrop"
           >
-            Upload your images
+            {{ $t('landmarkAddModal.imageUpload') }}
           </label>
           <input
             class="modal-body__input file"
@@ -180,7 +180,7 @@ const canAdd = computed(() => {
             multiple
             id="fileInput"
           />
-          <div>Files uploaded: {{ files?.length }}</div>
+          <div>{{ $t('landmarkAddModal.imagesUploaded') }} {{ files?.length }}</div>
         </div>
       </div>
     </template>

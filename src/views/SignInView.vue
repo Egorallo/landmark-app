@@ -4,8 +4,8 @@ import SignForm from '@/components/SignForm.vue';
 
 <template>
   <SignForm
-    :sign-title="'Sign in to use our services'"
-    :sign-button-title="'Sign in'"
+    :sign-title="$t('signForm.signInTitle')"
+    :sign-button-title="$t('signForm.signIn')"
     :new-acc="true"
   />
 </template>

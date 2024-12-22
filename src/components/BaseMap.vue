@@ -137,7 +137,6 @@ watch(
 
 <style scoped>
 .map {
-  /* width: 70%; */
   height: 100%;
   border-radius: 8px;
 }

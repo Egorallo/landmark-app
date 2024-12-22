@@ -63,18 +63,20 @@ onMounted(async () => {
   <div class="landmarks-list">
     <div class="landmarks-list__header">
       <div class="landmarks-list__heder__left">
-        <div class="landmarks-list__header__title">Top 10 Places</div>
+        <div class="landmarks-list__header__title">{{ $t('landmarksList.top10') }}</div>
         <input
           class="landmarks-list__header__checkbox"
           type="checkbox"
           v-model="showOnlyUserLandmarks"
         />
-        <label class="landmarks-list__header__label">Show only my landmarks</label>
+        <label class="landmarks-list__header__label">{{
+          $t('landmarksList.onlyMyLandmarks')
+        }}</label>
       </div>
       <div class="landmarks-list__header__right">
-        <BaseButton custom-styles="custom-b-class" @click="openModal" :disabled="isUserAdmin"
-          >Add new landmark +</BaseButton
-        >
+        <BaseButton custom-styles="custom-b-class" @click="openModal" :disabled="isUserAdmin">{{
+          $t('common.button-add')
+        }}</BaseButton>
       </div>
     </div>
     <div class="landmarks-list__container" v-if="landmarks.length">
@@ -86,7 +88,7 @@ onMounted(async () => {
       ></LandmarksListItem>
       <TriggerLoad @intersected="loadMoreLandmarks" />
     </div>
-    <div v-else>No landmarks available.</div>
+    <div v-else>{{ $t('landmarksList.noLandmarks') }}</div>
 
     <Transition name="fade">
       <LandmarkAddModal

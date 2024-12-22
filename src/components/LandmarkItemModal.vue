@@ -63,7 +63,7 @@ onMounted(async () => {
 
 <template>
   <BaseModal
-    :button-text="'Save changes'"
+    :button-text="$t('common.button-save')"
     :is-open="isModalOpened"
     @submit="updateLandmarkRating(newRating)"
     @modal-close="closeModal"
@@ -85,33 +85,40 @@ onMounted(async () => {
           ></ImageView>
         </div>
         <div class="modal-body__user__rating">
-          <p>Current Rating: ⭐ {{ landmark.rating }}</p>
-          <p>Landmark owner's rating: ⭐ {{ landmark.userRating }}</p>
+          <p>{{ $t('landmarkItemModal.rating') }} ⭐ {{ landmark.rating }}</p>
+          <p>{{ $t('landmarkItemModal.userRating') }} ⭐ {{ landmark.userRating }}</p>
         </div>
         <div class="modal-body__edit" v-if="canEdit || props.isUserAdmin">
           <p class="modal-body__title">
-            You can edit this landmark because you're the
-            {{ props.isUserAdmin ? 'ADMIN' : 'owner' }}
+            {{
+              $t('landmarkItemModal.edit', {
+                role: $t(
+                  props.isUserAdmin
+                    ? 'landmarkItemModal.roles.admin'
+                    : 'landmarkItemModal.roles.owner',
+                ),
+              })
+            }}
           </p>
-          <label for="title">Title</label>
+          <label for="title">{{ $t('common.name') }}</label>
           <input
             id="title"
             class="modal-body__input title"
             type="text"
             v-model="editedLandmark.name"
-            placeholder="Name"
+            :placeholder="$t('common.name')"
             maxlength="40"
           />
-          <label for="description">Description</label>
+          <label for="description">{{ $t('common.description') }}</label>
           <textarea
             id="description"
             class="modal-body__input description"
             v-model="editedLandmark.description"
-            placeholder="Description"
+            :placeholder="$t('common.description')"
             maxlength="120"
           />
           <template v-if="!props.isUserAdmin">
-            <label for="rating">Rating</label>
+            <label for="rating">{{ $t('landmarkItemModal.editRating') }}</label>
             <select
               class="modal-body__input rating"
               v-model="editedLandmark.userRating"
@@ -125,16 +132,16 @@ onMounted(async () => {
               <option value="5">⭐⭐⭐⭐⭐</option>
             </select>
           </template>
-          <BaseButton :custom-styles="'custom-btn-delete'" @click="adminDeleteLandmark"
-            >Delete</BaseButton
-          >
+          <BaseButton :custom-styles="'custom-btn-delete'" @click="adminDeleteLandmark">{{
+            $t('common.button-delete')
+          }}</BaseButton>
         </div>
         <div v-else>
           <div class="modlal-body__description">
             <p>{{ landmark.description }}</p>
           </div>
           <div class="modal-body__rating__container">
-            <label for="rating">How you like it: </label>
+            <label for="rating">{{ $t('landmarkItemModal.setRating') }} </label>
             <select
               class="modal-body__input rating"
               v-model="newRating"
