@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { evaluateScore } from '@/utils/scoreEvaluator';
 interface Props {
   landmark: Landmark;
 }
@@ -19,7 +18,6 @@ defineProps<Props>();
       <div class="landmarks-list-item__rating">
         {{ $t('landmarksListItem.rating') }} {{ landmark.rating }} ⭐
       </div>
-      <div>Score: {{ evaluateScore(landmark.rating, landmark.visitors) }}</div>
     </div>
   </div>
 </template>
@@ -27,7 +25,9 @@ defineProps<Props>();
 <style scoped>
 .landmarks-list-item {
   width: 100%;
+  min-height: 85px;
   padding-left: 10px;
+  padding-right: 10px;
   display: flex;
   justify-content: flex-start;
   column-gap: 20px;
@@ -48,8 +48,8 @@ defineProps<Props>();
 }
 
 .landmarks-list-item__img {
-  width: 85px;
-  height: 85px;
+  width: 65px;
+  height: 65px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -61,10 +61,16 @@ defineProps<Props>();
   justify-content: flex-start;
   align-items: flex-start;
   row-gap: 10px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .landmarks-list-item__name {
   font-size: 23px;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 </style>

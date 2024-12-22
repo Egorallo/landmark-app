@@ -125,9 +125,22 @@ onMounted(async () => {
   width: 100%;
 }
 
+.landmarks-list {
+  padding: 0px 10px 10px 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .landmarks-list__header {
   display: flex;
   justify-content: space-between;
+}
+
+.landmarks-list__header__title {
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .landmarks-list__title {
@@ -141,23 +154,19 @@ onMounted(async () => {
   margin-bottom: 10px;
 }
 
-.landmarks-list {
-  padding: 0px 10px 10px 10px;
-}
-
 .landmarks-list__container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 5px;
-  height: 830px;
-  overflow: auto;
-  margin-top: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-top: 8px;
+  row-gap: 10px;
 }
 
 @media (max-width: 750px) {
   .landmarks-list__container {
-    max-height: 410px;
+    max-height: 55vh;
   }
 }
 </style>

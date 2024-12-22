@@ -89,7 +89,8 @@ watch(landmarks, (newLandmarks) => {
   height: 100%;
   display: grid;
   column-gap: 10px;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 2fr 1fr;
+  overflow: hidden;
 }
 
 @media (max-width: 750px) {
@@ -97,7 +98,7 @@ watch(landmarks, (newLandmarks) => {
     display: grid;
     row-gap: 10px;
     grid-template-columns: none;
-    grid-template-rows: 1fr 200px;
+    grid-template-rows: 1fr 2fr;
   }
 }
 </style>

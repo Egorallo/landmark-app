@@ -84,9 +84,9 @@ export async function updLandmarkRating(
   userId: string,
   landmarkUserId: string,
   landmarkId: string,
-  updatedData: Partial<Landmark>,
+  rating: number,
+  landmark: Landmark,
 ) {
-  console.log(landmarkId);
   const landmarksRatedRef = collection(db, `users/${userId}/landmarksRated`);
 
   const q = query(landmarksRatedRef, where('landmarkId', '==', landmarkId));
@@ -94,13 +94,38 @@ export async function updLandmarkRating(
   console.log(querySnapshot.empty);
 
   if (!querySnapshot.empty) {
-    console.log('HAHAHAHAHAHAHA');
+    const docId = querySnapshot.docs[0].id;
+    let currRating: number = 1;
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if ('rating' in data) {
+        currRating = data.rating;
+      }
+    });
+
+    const updatedData = {
+      rating: parseFloat(
+        ((+landmark.totalRating - currRating + +rating) / +landmark.visitors).toFixed(2),
+      ),
+      totalRating: +landmark.totalRating - currRating + +rating,
+    };
+    await updLandmark(landmarkUserId, landmarkId, updatedData);
+    const docRef = doc(db, `users/${userId}/landmarksRated/${docId}`);
+    await updateDoc(docRef, { rating });
+
     return false;
+  } else {
+    const updatedData = {
+      rating: parseFloat(((+landmark.totalRating + +rating) / (+landmark.visitors + 1)).toFixed(2)),
+      totalRating: +landmark.totalRating + +rating,
+      visitors: +landmark.visitors + 1,
+    };
+    console.log('HAHAHAHAHAHAHA');
+    await updLandmark(landmarkUserId, landmarkId, updatedData);
+
+    await addDoc(landmarksRatedRef, { landmarkId, rating });
   }
-
-  await updLandmark(landmarkUserId, landmarkId, updatedData);
-
-  await addDoc(landmarksRatedRef, { landmarkId });
 
   return true;
 }

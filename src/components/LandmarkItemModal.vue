@@ -41,6 +41,8 @@ async function updateLandmarkRating(newRating: number) {
       await landmarksStore.fetchLandmarks();
       props.closeModal();
     } else {
+      await landmarksStore.fetchLandmarks();
+
       console.log('Rating update failed');
     }
   } else {
