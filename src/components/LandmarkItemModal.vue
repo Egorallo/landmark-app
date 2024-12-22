@@ -4,6 +4,7 @@ import BaseButton from './BaseButton.vue';
 import { ref, onMounted, reactive } from 'vue';
 import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
+import ImageView from './ImageView.vue';
 
 interface Props {
   isModalOpened: boolean;
@@ -77,12 +78,11 @@ onMounted(async () => {
     <template #content>
       <div class="modal-body">
         <div class="modal-body__image__container">
-          <img
-            class="modal-body__image"
+          <ImageView
             v-for="(image, id) in landmark.images"
-            :src="image"
+            :image-src="image"
             :key="id"
-          />
+          ></ImageView>
         </div>
         <div class="modal-body__user__rating">
           <p>Current Rating: ⭐ {{ landmark.rating }}</p>
@@ -198,6 +198,7 @@ onMounted(async () => {
   object-fit: cover;
   border-radius: 8px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .modal-body__rating__container {
