@@ -32,7 +32,6 @@ const baseMap = ref();
 function zoomToLandmark(landmarkId: string) {
   if (baseMap.value) {
     baseMap.value.zoomToLandmark(landmarkId);
-    console.log('zooming to landmark', landmarkId);
   }
 }
 
@@ -41,7 +40,6 @@ onMounted(async () => {
 });
 
 watch(landmarks, (newLandmarks) => {
-  console.log('updateddada');
   landmarkMarkers.value = [];
   newLandmarks.forEach((landmark) => {
     landmarkMarkers.value.push({ id: landmark.id!, lat: landmark.lat, lng: landmark.long });
@@ -76,14 +74,6 @@ watch(landmarks, (newLandmarks) => {
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 .main__container {
   width: 100%;
   height: 100%;

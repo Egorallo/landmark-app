@@ -74,6 +74,8 @@ onMounted(async () => {
     });
   }
 
+  addLandmarkMarkers();
+
   if (!locationStore.isLocationFetched || !props.addMarkers) {
     try {
       await locationStore.fetchLocation();
@@ -81,8 +83,6 @@ onMounted(async () => {
       toastsStore.addToast('Failed to fetch user location');
     }
   }
-
-  addLandmarkMarkers();
 
   if (locationStore.lat && locationStore.long) {
     if (userLocationMaker.value) {
@@ -107,7 +107,6 @@ onMounted(async () => {
 
 function addLandmarkMarkers() {
   if (!props.landmarkMarkers || !mapInstance.value) return;
-
   markerClusterGroup.value!.clearLayers();
 
   props.landmarkMarkers.forEach((landmark) => {

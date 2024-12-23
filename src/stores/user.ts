@@ -4,7 +4,6 @@ import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
   const userId = ref<string | null>(null);
-  const isAdmin = ref<boolean>(false);
 
   async function initializeUser() {
     const user = await getCurrentUser();
@@ -13,5 +12,5 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { userId, isAdmin, initializeUser };
+  return { userId, initializeUser };
 });

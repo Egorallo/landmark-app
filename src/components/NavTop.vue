@@ -54,7 +54,7 @@ onMounted(async () => {
 
 .nav-left {
   font-size: 20px;
-  color: #00ffe5;
+  color: var(--color-nav-left);
 }
 
 .nav-right {
@@ -65,8 +65,8 @@ onMounted(async () => {
 }
 
 .nav-right__lang {
-  background-color: var(--bg-color-calendar-selected);
-  border: 1px solid var(--border-calendar-color);
+  background-color: var(--bg-color-lang);
+  border: 1px solid var(--border-lang-color);
   border-radius: 5px;
   outline: none;
   cursor: pointer;

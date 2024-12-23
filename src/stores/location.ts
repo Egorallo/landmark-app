@@ -14,7 +14,6 @@ export const useLocationStore = defineStore('location', () => {
             lat.value = position.coords.latitude;
             long.value = position.coords.longitude;
             isLocationFetched.value = true;
-            console.log('got user locationL ', lat.value, long.value);
             resolve();
           },
           (error) => {

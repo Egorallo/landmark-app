@@ -4,10 +4,10 @@
     "description": "Description",
     "button-save": "Save changes",
     "button-delete": "Delete",
-    "button-add": "Add new landmark +"
+    "button-add": "Add landmark +"
   },
   "landmarksList": {
-    "top10": "Top 10 Landmarks",
+    "top": "Top Landmarks",
     "onlyMyLandmarks": "Show only my landmarks",
     "noLandmarks": "No landmarks available."
   },
@@ -15,7 +15,7 @@
     "rating": "Rating"
   },
   "landmarkAddModal": {
-    "header": "Add new landmark",
+    "header": "Add landmark",
     "rating": "Rating",
     "imageUpload": "Upload your images",
     "imagesUploaded": "Files uploaded:"

@@ -37,14 +37,9 @@ async function updateLandmarkRating(newRating: number) {
       +newRating,
     );
     if (res) {
-      console.log('Rating updated successfully');
-      await landmarksStore.fetchLandmarks();
       props.closeModal();
-    } else {
-      await landmarksStore.fetchLandmarks();
-
-      console.log('Rating update failed');
     }
+    await landmarksStore.fetchLandmarks();
   } else {
     await landmarksStore.updateLandmark(props.landmark.id!, editedLandmark);
   }
@@ -57,9 +52,6 @@ function adminDeleteLandmark() {
 
 onMounted(async () => {
   canEdit.value = userStore.userId === props.landmark.userId;
-  console.log(canEdit.value);
-
-  console.log('from modal ', props.isUserAdmin);
 });
 </script>
 
@@ -195,7 +187,7 @@ onMounted(async () => {
 .modal-body__title {
   font-size: 20px;
   font-weight: bold;
-  color: var(--button-main-color);
+  color: var(--color-modal-body-title);
 }
 
 .modal-body__image__container {
@@ -219,7 +211,7 @@ onMounted(async () => {
 }
 
 .rating {
-  background-color: var(--bg-color-calendar-hover);
+  background-color: var(--bg-color-rating);
 }
 
 .title {

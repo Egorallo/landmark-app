@@ -24,7 +24,7 @@ export async function compressImage(file: File, maxFileSizeMB: number = 1): Prom
         }
 
         if (base64.length / 1024 / 1024 > maxFileSizeMB) {
-          reject('Unable to compress image below 1MB');
+          reject('Unable to compress image');
         } else {
           resolve(base64);
         }

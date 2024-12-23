@@ -41,15 +41,11 @@ export const useLandmarksStore = defineStore('landmarks', () => {
   }
 
   async function deleteLandmark(delLamdmarkUserId: string, landmarkId: string) {
-    // if (!userId.value) {
-    //   return;
-    // }
     landmarks.value = landmarks.value.filter((landmark) => landmark.id !== landmarkId);
 
     try {
       await removeLandmark(delLamdmarkUserId, landmarkId);
     } catch (_) {
-      console.error('Failed to delete landmark');
       const fetchedLandmarks = await getAllLandmarks();
       landmarks.value = fetchedLandmarks;
     }
@@ -58,8 +54,6 @@ export const useLandmarksStore = defineStore('landmarks', () => {
   async function updateLandmark(landmarkId: string, updatedData: Partial<Landmark>) {
     if (!userId.value) {
       return;
-    }
-    if (updatedData.rating) {
     }
     landmarks.value = landmarks.value.map((landmark) =>
       landmark.id === landmarkId ? { ...landmark, ...updatedData } : landmark,
@@ -72,7 +66,6 @@ export const useLandmarksStore = defineStore('landmarks', () => {
     if (!landmark || !userId.value) {
       return;
     }
-    console.log('from store ', landmarkId);
     const res = await updLandmarkRating(userId.value, landmarkUserId, landmarkId, rating, landmark);
     return res;
   }

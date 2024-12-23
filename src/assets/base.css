@@ -1,25 +1,25 @@
+@import url(shared.css);
+
 :root {
   --bg-color: #2c2c2c;
   --text-main-color: #fff;
   --text-secondary-color: #b0b0b0;
-  --border-calendar-color: #808080;
-  --bg-color-calendar-selected: #ff7300;
-  --bg-color-calendar-hover: #414141;
-  --scrollbar-calendar-color: #ccc;
-  --scrollbar-calenadar-color-hover: #aaa;
-  --text-selected-day-calendar-color: #472715;
-  --button-update-color: #7ae2ae;
-  --loader-primary-color: #3b3b3b;
-  --loader-secondary-color: #4c4c4c;
-  --bg-color-tasklistitem-hover: #3f3f3f;
   --bg-color-form: #2c2c2c;
   --color-icon: #ffffff;
-  --border-app-color: #3f3f3f;
   --button-main-color: #ff7300;
   --button-delete-color: #ff4d4d;
   --button-text-color: #000000;
   --button-main-color-hover: #ff9c4d;
   --button-disabled-color: #ccc;
+  --text-file-select-color: #8c8b8b;
+  --bg-color-file-select: #4c4c4c;
+  --border-file-select-color: #8c8a8a;
+  --color-modal-body-title: #ff7300;
+  --bg-color-rating: #414141;
+  --bg-color-landmark-item: #414141;
+  --color-nav-left: #00ffe5;
+  --bg-color-lang: #ff7300;
+  --border-lang-color: #808080;
 }
 
 html {

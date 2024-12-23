@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import LandmarksListItem from './LandmarksListItem.vue';
 import BaseButton from './BaseButton.vue';
 import LandmarkAddModal from './LandmarkAddModal.vue';
@@ -20,6 +20,9 @@ const emits = defineEmits(['zoom-to-landmark']);
 const isModalOpened = ref(false);
 const isLandmarkViewModalOpened = ref(false);
 const currentViewingLandmark = ref<Landmark>();
+const loadingText = ref('Loading.');
+
+let timer: ReturnType<typeof setInterval>;
 
 const openModal = () => {
   isModalOpened.value = true;
@@ -50,12 +53,17 @@ const displayedLandmarks = computed(() => {
 });
 
 function loadMoreLandmarks() {
-  console.log('loading more landmarks');
+  // smth smth
 }
 onMounted(async () => {
   isUserAdmin.value = await checkIfAdmin(userId!);
-  console.log(isUserAdmin.value);
-  console.log(userId);
+  timer = setInterval(() => {
+    const currentDots = loadingText.value.match(/\./g)?.length || 0;
+    loadingText.value = `Loading${'.'.repeat((currentDots % 3) + 1)}`;
+  }, 200);
+});
+onUnmounted(() => {
+  clearInterval(timer);
 });
 </script>
 
@@ -63,7 +71,7 @@ onMounted(async () => {
   <div class="landmarks-list">
     <div class="landmarks-list__header">
       <div class="landmarks-list__heder__left">
-        <div class="landmarks-list__header__title">{{ $t('landmarksList.top10') }}</div>
+        <div class="landmarks-list__header__title">{{ $t('landmarksList.top') }}</div>
         <input
           class="landmarks-list__header__checkbox"
           type="checkbox"
@@ -88,7 +96,7 @@ onMounted(async () => {
       ></LandmarksListItem>
       <TriggerLoad @intersected="loadMoreLandmarks" />
     </div>
-    <div v-else>{{ $t('landmarksList.noLandmarks') }}</div>
+    <div class="landmarks-list__loading" v-else>{{ loadingText }}</div>
 
     <Transition name="fade">
       <LandmarkAddModal
@@ -114,14 +122,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 .custom-b-class {
   width: 100%;
 }
@@ -163,6 +163,15 @@ onMounted(async () => {
   overflow-y: auto;
   margin-top: 8px;
   row-gap: 10px;
+}
+
+.landmarks-list__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 22px;
+  color: var(--text-secondary-color);
 }
 
 @media (max-width: 750px) {

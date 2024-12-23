@@ -37,7 +37,7 @@ defineProps<Props>();
 }
 
 .landmarks-list-item:hover {
-  background-color: var(--bg-color-calendar-hover);
+  background-color: var(--bg-color-landmark-item);
   cursor: pointer;
 }
 

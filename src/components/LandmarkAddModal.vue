@@ -67,18 +67,12 @@ const handleDrop = (e: DragEvent) => {
 };
 
 async function addNewLandmark(landmark: Landmark) {
-  if (!files.value || files.value.length === 0) {
-    alert('Please select at least one image.');
-    return;
-  }
-
   const compressedImages: string[] = [];
-  for (const file of files.value) {
+  for (const file of files.value!) {
     try {
-      const compressedImage = await compressImage(file, 0.5);
+      const compressedImage = await compressImage(file, 0.45);
       compressedImages.push(compressedImage);
-    } catch (error) {
-      console.error('Image compression failed:', error);
+    } catch (_) {
       alert('Failed to process one of the images. Please try again.');
       return;
     }
@@ -115,7 +109,7 @@ const canAdd = computed(() => {
 
 <template>
   <BaseModal
-    :button-text="'Add'"
+    :button-text="$t('common.button-add')"
     :is-open="isModalOpened"
     @submit="addNewLandmark(newLandmark)"
     @modal-close="closeModal"
@@ -131,7 +125,7 @@ const canAdd = computed(() => {
     <template #content>
       <div class="modal-body">
         <BaseMap
-          :landmark-markers="landmarkMarkers"
+          :landmark-markers="props.landmarkMarkers"
           @placed-marker="handleNewMarker"
           :add-markers="true"
           class="mappa"
@@ -247,15 +241,15 @@ const canAdd = computed(() => {
 .modal-body__input__file__text {
   padding: 10px;
   cursor: pointer;
-  color: #8c8b8b;
+  color: var(--text-file-select);
   border-radius: 8px;
   margin-bottom: 10px;
   height: 100px;
-  background-color: #4c4c4c;
+  background-color: var(--bg-color-file-select);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #8c8a8a;
+  border: 1px dashed var(--border-file-select-color);
 }
 
 .file {

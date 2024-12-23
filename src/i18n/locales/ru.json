@@ -7,7 +7,7 @@
     "button-add": "Добавить место +"
   },
   "landmarksList": {
-    "top10": "Топ 10 мест",
+    "top": "Топ мест",
     "onlyMyLandmarks": "Показать только мои места",
     "noLandmarks": "Мест нет."
   },
