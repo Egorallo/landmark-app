@@ -32,7 +32,7 @@ onMounted(async () => {
         <option value="en">En</option>
         <option value="ru">Ru</option>
       </select>
-      <div class="nav-right__profile-pic">
+      <div class="nav-right__profile-pic flex-center">
         <div class="nav-right__profile-pic-text">{{ userPfp }}</div>
       </div>
 
@@ -73,9 +73,6 @@ onMounted(async () => {
 }
 
 .nav-right__profile-pic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 20px;
   height: 20px;
   border-radius: 50%;

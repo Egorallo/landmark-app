@@ -1,5 +1,5 @@
 @import url(shared.css);
-
+@import url(utils.css);
 :root {
   --bg-color: #2c2c2c;
   --text-main-color: #fff;

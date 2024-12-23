@@ -96,7 +96,7 @@ onUnmounted(() => {
       ></LandmarksListItem>
       <TriggerLoad @intersected="loadMoreLandmarks" />
     </div>
-    <div class="landmarks-list__loading" v-else>{{ loadingText }}</div>
+    <div class="landmarks-list__loading flex-center" v-else>{{ loadingText }}</div>
 
     <Transition name="fade">
       <LandmarkAddModal
@@ -166,9 +166,6 @@ onUnmounted(() => {
 }
 
 .landmarks-list__loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin-top: 20px;
   font-size: 22px;
   color: var(--text-secondary-color);

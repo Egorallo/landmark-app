@@ -8,7 +8,7 @@ defineProps<Props>();
 
 <template>
   <div class="landmarks-list-item">
-    <div class="landmarks-list-item__left">
+    <div class="landmarks-list-item__left flex-center">
       <img class="landmarks-list-item__img" :src="landmark.images[0]" />
     </div>
     <div class="landmarks-list-item__right">
@@ -39,12 +39,6 @@ defineProps<Props>();
 .landmarks-list-item:hover {
   background-color: var(--bg-color-landmark-item);
   cursor: pointer;
-}
-
-.landmarks-list-item__left {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .landmarks-list-item__img {

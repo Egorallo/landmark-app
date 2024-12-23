@@ -1,5 +1,5 @@
 <template>
-  <main class="not-found">
+  <main class="not-found flex-center">
     <h1 class="not-found__text">{{ $t('notFound.header') }}</h1>
     <router-link class="not-found__link" to="/">{{ $t('notFound.link') }}</router-link>
   </main>
@@ -7,10 +7,7 @@
 
 <style>
 .not-found {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   margin: auto;
   gap: 20px;
   height: 500px;

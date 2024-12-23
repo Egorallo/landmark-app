@@ -116,7 +116,7 @@ const canAdd = computed(() => {
     :button-disabled="!canAdd"
   >
     <template #header>
-      <div class="modal-header">
+      <div class="modal-header flex-space-between">
         <h3 class="modal-hedaer__text">{{ $t('landmarkAddModal.header') }}</h3>
         <button class="modal-header__button" @click="emits('modal-close-button')">❌</button>
       </div>
@@ -159,7 +159,7 @@ const canAdd = computed(() => {
         <div class="modal-body__input__file__container">
           <label
             for="fileInput"
-            class="modal-body__input__file__text"
+            class="modal-body__input__file__text flex-center"
             @dragover.prevent
             @drop="handleDrop"
           >
@@ -184,31 +184,6 @@ const canAdd = computed(() => {
 <style scoped>
 .mappa {
   min-height: 300px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header__button {
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
-  border: none;
-}
-
-.modal-header__button:hover {
-  cursor: pointer;
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-  margin-bottom: 10px;
 }
 
 .modal-body__input {
@@ -246,9 +221,6 @@ const canAdd = computed(() => {
   margin-bottom: 10px;
   height: 100px;
   background-color: var(--bg-color-file-select);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 1px dashed var(--border-file-select-color);
 }
 

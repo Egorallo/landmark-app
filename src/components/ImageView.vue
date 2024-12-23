@@ -21,7 +21,7 @@ function closePreview() {
   <div>
     <img :src="imageSrc" :alt="altText" class="thumbnail" @click="openPreview" />
 
-    <div v-if="isPreviewVisible" class="fullscreen-overlay" @click="closePreview">
+    <div v-if="isPreviewVisible" class="fullscreen-overlay flex-center" @click="closePreview">
       <img :src="imageSrc" :alt="altText" class="fullscreen-image" />
     </div>
   </div>
@@ -49,9 +49,6 @@ function closePreview() {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 2000;
 }
 

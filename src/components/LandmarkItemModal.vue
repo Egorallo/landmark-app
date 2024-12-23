@@ -63,7 +63,7 @@ onMounted(async () => {
     @modal-close="closeModal"
   >
     <template #header>
-      <div class="modal-header">
+      <div class="modal-header flex-space-between">
         <h3>{{ landmark.name }}</h3>
         <button class="modal-header__button" @click="emits('modal-close-button')">❌</button>
       </div>
@@ -159,31 +159,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header__button {
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
-  border: none;
-}
-
-.modal-header__button:hover {
-  cursor: pointer;
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-  margin-bottom: 10px;
-}
-
 .modal-body__title {
   font-size: 20px;
   font-weight: bold;
