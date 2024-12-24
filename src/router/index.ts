@@ -1,23 +1,49 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import SignUpView from '../views/SignUpView.vue';
+import SignInView from '../views/SignInView.vue';
+import MainView from '@/views/MainView.vue';
+import NotFoundView from '@/views/NotFoundView.vue';
+import { getCurrentUser } from '@/services/authService';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView,
+      path: '/sign-up',
+      name: 'signup',
+      component: SignUpView,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/sign-in',
+      name: 'signin',
+      component: SignInView,
+    },
+    {
+      path: '/',
+      name: 'main',
+      component: MainView,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundView,
     },
   ],
-})
+});
 
-export default router
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (await getCurrentUser()) {
+      next();
+    } else {
+      next('/sign-in');
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;

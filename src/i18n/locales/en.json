@@ -1,0 +1,52 @@
+{
+  "common": {
+    "name": "Name",
+    "description": "Description",
+    "button-save": "Save changes",
+    "button-delete": "Delete",
+    "button-add": "Add landmark +"
+  },
+  "landmarksList": {
+    "top": "Top Landmarks",
+    "onlyMyLandmarks": "Show only my landmarks",
+    "noLandmarks": "No landmarks available."
+  },
+  "landmarksListItem": {
+    "rating": "Rating"
+  },
+  "landmarkAddModal": {
+    "header": "Add landmark",
+    "rating": "Rating",
+    "imageUpload": "Upload your images",
+    "imagesUploaded": "Files uploaded:"
+  },
+  "landmarkItemModal": {
+    "rating": "Current Rating:",
+    "userRating": "Landmark owner's rating:",
+    "edit": "You can edit this landmark because you're the {role}",
+    "roles": {
+      "admin": "admin",
+      "owner": "owner"
+    },
+    "editRating": "Rating",
+    "setRating": "How you like it:"
+  },
+  "notFound": {
+    "header": "This is not what you are looking for",
+    "link": "Go back to the main page"
+  },
+  "signForm": {
+    "email": "Email",
+    "emailPlaceholder": "Your email",
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+    "confirm": "Confirm password",
+    "confirmPlaceholder": "Reenter the password",
+    "dontHave": "Don't have an account?",
+    "have": "Already have an account?",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signInTitle": "Sign in to use our services",
+    "signUpTitle": "Sign up to use our services"
+  }
+}
