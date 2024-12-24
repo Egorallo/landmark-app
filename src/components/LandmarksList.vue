@@ -5,7 +5,6 @@ import LandmarksListItem from './LandmarksListItem.vue';
 import BaseButton from './BaseButton.vue';
 import LandmarkAddModal from './LandmarkAddModal.vue';
 import LandmarkItemModal from './LandmarkItemModal.vue';
-import TriggerLoad from './TriggerLoad.vue';
 import { checkIfAdmin } from '@/services/authService';
 
 interface Props {
@@ -52,9 +51,6 @@ const displayedLandmarks = computed(() => {
   return showOnlyUserLandmarks.value ? props.landmarksByUserId : props.landmarks;
 });
 
-function loadMoreLandmarks() {
-  // smth smth
-}
 onMounted(async () => {
   isUserAdmin.value = await checkIfAdmin(userId!);
   timer = setInterval(() => {
@@ -94,7 +90,6 @@ onUnmounted(() => {
         :landmark="landmark"
         @click="openLandmarkViewModal(landmark)"
       ></LandmarksListItem>
-      <TriggerLoad @intersected="loadMoreLandmarks" />
     </div>
     <div class="landmarks-list__loading flex-center" v-else>{{ loadingText }}</div>
 
