@@ -114,6 +114,7 @@ const canAdd = computed(() => {
     @submit="addNewLandmark(newLandmark)"
     @modal-close="closeModal"
     :button-disabled="!canAdd"
+    :modal-width="'modal-width'"
   >
     <template #header>
       <div class="modal-header flex-space-between">
@@ -180,6 +181,12 @@ const canAdd = computed(() => {
     </template>
   </BaseModal>
 </template>
+
+<style>
+.modal-width {
+  max-width: 600px !important;
+}
+</style>
 
 <style scoped>
 .mappa {

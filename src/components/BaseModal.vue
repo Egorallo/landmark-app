@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseButton from './BaseButton.vue';
+import { computed } from 'vue';
 
 interface Props {
   isOpen: boolean;
@@ -7,9 +8,12 @@ interface Props {
   buttonDsiabled?: boolean;
   buttonText: string;
   buttonDisabled?: boolean;
+  modalWidth?: string;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const modalWidthClass = computed(() => `${props.modalWidth || ''}`);
 
 const emit = defineEmits(['modal-close', 'submit']);
 
@@ -22,7 +26,7 @@ function handleSubmitAndClose() {
 <template>
   <div v-if="isOpen" class="modal-mask" @click="emit('modal-close')">
     <div class="modal-wrapper">
-      <div @click.stop class="modal-container">
+      <div @click.stop class="modal-container" :class="modalWidthClass">
         <div class="modal-header">
           <slot name="header"> default header </slot>
         </div>
