@@ -8,5 +8,3 @@ export function generateHexColor() {
 
   return color;
 }
-
-// remove

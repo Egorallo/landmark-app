@@ -6,6 +6,9 @@ import { ref, computed, onMounted } from 'vue';
 import { getCurrentUser } from '@/services/authService';
 import { generateHexColor } from '@/utils/radnomHexColor';
 import BaseButton from '@/components/BaseButton.vue';
+import { useLocaleStore } from '@/stores/locale';
+import { getI18n } from '@/i18n';
+const localeStore = useLocaleStore();
 
 const router = useRouter();
 const userEmail = ref('');
@@ -22,6 +25,16 @@ function changePfpColor() {
   pfpColor.value = generateHexColor();
 }
 
+function changeLocale() {
+  if (getI18n().global.locale === 'en') {
+    getI18n().global.locale = 'ru';
+    localeStore.setLocale('ru');
+  } else {
+    getI18n().global.locale = 'en';
+    localeStore.setLocale('en');
+  }
+}
+
 onMounted(async () => {
   const user = await getCurrentUser();
   userEmail.value = user?.email || '';
@@ -32,15 +45,9 @@ onMounted(async () => {
   <nav class="nav">
     <div class="nav-left">Landmarks 2025 📍</div>
     <div class="nav-right">
-      <BaseButton
-        :custom-styles="'custom-btn-locale'"
-        @click="
-          {
-            $i18n.locale === 'en' ? ($i18n.locale = 'ru') : ($i18n.locale = 'en');
-          }
-        "
-        >{{ $i18n.locale.toUpperCase() }}</BaseButton
-      >
+      <BaseButton :custom-styles="'custom-btn-locale'" @click="changeLocale">{{
+        $i18n.locale.toUpperCase()
+      }}</BaseButton>
       <div class="nav-right__profile-pic flex-center">
         <div class="nav-right__profile-pic-text" @click="changePfpColor">{{ userPfp }}</div>
       </div>
