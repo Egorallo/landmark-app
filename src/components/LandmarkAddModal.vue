@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue';
-import BaseMap from './BaseMap.vue';
+import MapBox from './MapBox.vue';
 import { ref, reactive, computed } from 'vue';
 import { MAX_FILES, MAX_FILE_SIZE_MB } from '@/constants/files';
 import { useLandmarksStore } from '@/stores/landmarks';
@@ -125,12 +125,12 @@ const canAdd = computed(() => {
 
     <template #content>
       <div class="modal-body">
-        <BaseMap
+        <MapBox
           :landmark-markers="props.landmarkMarkers"
           @placed-marker="handleNewMarker"
           :add-markers="true"
           class="mappa"
-        ></BaseMap>
+        ></MapBox>
         <input
           class="modal-body__input title"
           type="text"

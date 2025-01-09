@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseMap from '@/components/BaseMap.vue';
+import MapBox from '@/components/MapBox.vue';
 import LandmarksList from '@/components/LandmarksList.vue';
 import { useLandmarksStore } from '@/stores/landmarks';
 import { useUserStore } from '@/stores/user';
@@ -27,11 +27,11 @@ const closeLandmarkViewModal = () => {
 
 const isUserAdmin = ref(false);
 
-const baseMap = ref();
+const mapBox = ref();
 
 function zoomToLandmark(landmarkId: string) {
-  if (baseMap.value) {
-    baseMap.value.zoomToLandmark(landmarkId);
+  if (mapBox.value) {
+    mapBox.value.zoomToLandmark(landmarkId);
   }
 }
 
@@ -49,10 +49,10 @@ watch(landmarks, (newLandmarks) => {
 
 <template>
   <div class="main__container">
-    <BaseMap
+    <MapBox
       :landmark-markers="landmarkMarkers"
       @opened-landmark-view-modal="openLandmarkViewModal"
-      ref="baseMap"
+      ref="mapBox"
     />
 
     <LandmarksList
