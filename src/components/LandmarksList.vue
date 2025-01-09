@@ -92,26 +92,22 @@ onUnmounted(() => {
     </div>
     <div class="landmarks-list__loading flex-center" v-else>{{ loadingText }}</div>
 
-    <Transition name="fade">
-      <LandmarkAddModal
-        v-if="isModalOpened"
-        :isModalOpened="isModalOpened"
-        :user-id="userId"
-        :close-modal="closeModal"
-        :landmark-markers="props.landmarkMarkers"
-        @modal-close-button="closeModal"
-      />
-    </Transition>
-    <Transition name="fade">
-      <LandmarkItemModal
-        v-if="isLandmarkViewModalOpened"
-        :is-modal-opened="isLandmarkViewModalOpened"
-        :close-modal="closeLandmarkViewModal"
-        :landmark="currentViewingLandmark!"
-        :is-user-admin="isUserAdmin"
-        @modal-close-button="closeLandmarkViewModal"
-      ></LandmarkItemModal>
-    </Transition>
+    <LandmarkAddModal
+      v-if="isModalOpened"
+      :isModalOpened="isModalOpened"
+      :user-id="userId"
+      :close-modal="closeModal"
+      :landmark-markers="props.landmarkMarkers"
+      @modal-close-button="closeModal"
+    />
+    <LandmarkItemModal
+      v-if="isLandmarkViewModalOpened"
+      :is-modal-opened="isLandmarkViewModalOpened"
+      :close-modal="closeLandmarkViewModal"
+      :landmark="currentViewingLandmark!"
+      :is-user-admin="isUserAdmin"
+      @modal-close-button="closeLandmarkViewModal"
+    ></LandmarkItemModal>
   </div>
 </template>
 

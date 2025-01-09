@@ -61,15 +61,13 @@ watch(landmarks, (newLandmarks) => {
       :landmarks-by-user-id="landmarksByUserId"
       @zoom-to-landmark="zoomToLandmark"
     />
-    <Transition name="fade">
-      <LandmarkItemModal
-        v-if="isLandmarkViewModalOpened"
-        :is-modal-opened="isLandmarkViewModalOpened"
-        :close-modal="closeLandmarkViewModal"
-        :landmark="currentViewingLandmark!"
-        :is-user-admin="isUserAdmin"
-      ></LandmarkItemModal>
-    </Transition>
+    <LandmarkItemModal
+      v-if="isLandmarkViewModalOpened"
+      :is-modal-opened="isLandmarkViewModalOpened"
+      :close-modal="closeLandmarkViewModal"
+      :landmark="currentViewingLandmark!"
+      :is-user-admin="isUserAdmin"
+    ></LandmarkItemModal>
   </div>
 </template>
 

@@ -13,6 +13,8 @@ const localeStore = useLocaleStore();
 const router = useRouter();
 const userEmail = ref('');
 const pfpColor = ref('white');
+const showSignOut = ref(false);
+const profilePicRef = ref<HTMLElement | null>(null);
 
 const userPfp = computed(() => (userEmail.value || '').slice(0, 2));
 
@@ -21,7 +23,14 @@ async function handleSignOut() {
   router.push('/sign-in');
 }
 
+function handleClickOutside(event: MouseEvent) {
+  if (profilePicRef.value && !profilePicRef.value.contains(event.target as Node)) {
+    showSignOut.value = false;
+  }
+}
+
 function changePfpColor() {
+  showSignOut.value = !showSignOut.value;
   pfpColor.value = generateHexColor();
 }
 
@@ -38,6 +47,7 @@ function changeLocale() {
 onMounted(async () => {
   const user = await getCurrentUser();
   userEmail.value = user?.email || '';
+  window.addEventListener('click', handleClickOutside);
 });
 </script>
 
@@ -48,18 +58,67 @@ onMounted(async () => {
       <BaseButton :custom-styles="'custom-btn-locale'" @click="changeLocale">{{
         $i18n.locale.toUpperCase()
       }}</BaseButton>
-      <div class="nav-right__profile-pic flex-center">
-        <div class="nav-right__profile-pic-text" @click="changePfpColor">{{ userPfp }}</div>
+      <div class="nav-right__profile-pic flex-center" ref="profilePicRef" @click="changePfpColor">
+        <div class="nav-right__profile-pic-text">{{ userPfp }}</div>
+        <div class="nav-right__sign-out" v-show="showSignOut">
+          <BaseButton :custom-styles="'custom-btn-sign-out'" @click="handleSignOut">
+            <div class="slot-content">
+              <IconSignOut
+                :color="'var(--color-icon)'"
+                :width="'20px'"
+                :height="'20px'"
+              ></IconSignOut>
+              <span class="span-aboba">Sign Out</span>
+            </div>
+          </BaseButton>
+        </div>
       </div>
-
-      <button class="nav-right__button" @click="handleSignOut">
-        <IconSignOut :color="'var(--color-icon)'" :width="'27px'" :height="'27px'"></IconSignOut>
-      </button>
     </div>
   </nav>
 </template>
 
 <style scoped>
+.slot-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+}
+.span-aboba {
+  color: var(--text-main-color);
+}
+.nav-right__sign-out {
+  width: 120px;
+  position: absolute;
+  display: flex;
+  background-color: var(--bg-color-sign-out);
+  bottom: -40px;
+  left: -90px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.4s ease;
+}
+
+.nav-right__sign-out:hover {
+  background-color: var(--bg-color-sign-out-hover);
+}
+
+.custom-btn-sign-out {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.4s ease;
+}
+
+.custom-btn-sign-out:hover {
+  background-color: transparent;
+}
+
 .custom-btn-locale {
   height: 100%;
   background-color: var(--button-locale-color);
@@ -91,7 +150,7 @@ onMounted(async () => {
   font-size: 14px;
   align-items: center;
   justify-content: space-between;
-  width: 150px;
+  width: 100px;
 }
 
 .nav-right__lang {
@@ -108,6 +167,7 @@ onMounted(async () => {
   border-radius: 50%;
   background-color: v-bind(pfpColor);
   cursor: pointer;
+  position: relative;
 }
 
 .nav-right__profile-pic-text {

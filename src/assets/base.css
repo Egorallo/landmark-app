@@ -23,6 +23,8 @@
   --button-locale-color: #3e41ff;
   --button-locale-text-color: #ffffff;
   --button-locale-color-hover: #2024fb;
+  --bg-color-sign-out: #434343;
+  --bg-color-sign-out-hover: #4d4d4d;
 }
 
 html {
