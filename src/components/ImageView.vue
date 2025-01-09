@@ -38,10 +38,6 @@ function closePreview() {
   transition: transform 0.2s ease;
 }
 
-.thumbnail:hover {
-  transform: scale(1.05);
-}
-
 .fullscreen-overlay {
   position: fixed;
   top: 0;
