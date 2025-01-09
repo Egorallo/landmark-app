@@ -24,36 +24,37 @@ function handleSubmitAndClose() {
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-mask" @click="emit('modal-close')">
-    <div class="modal-wrapper">
-      <div @click.stop class="modal-container" :class="modalWidthClass">
-        <div class="modal-header">
-          <slot name="header"> default header </slot>
-        </div>
-        <div class="modal-body">
-          <slot name="content"> default content </slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <div>
-              <BaseButton
-                :custom-styles="buttonStyle"
-                :disabled="buttonDisabled"
-                @click="handleSubmitAndClose"
-                >{{ buttonText }}</BaseButton
-              >
-            </div>
-          </slot>
+  <Teleport to="#app">
+    <div class="modal-mask" @click="emit('modal-close')">
+      <div class="modal-wrapper" v-if="isOpen">
+        <div @click.stop class="modal-container" :class="modalWidthClass">
+          <div class="modal-header">
+            <slot name="header"></slot>
+          </div>
+          <div class="modal-body">
+            <slot name="content"></slot>
+          </div>
+          <div class="modal-footer">
+            <slot name="footer">
+              <div>
+                <BaseButton
+                  :custom-styles="buttonStyle"
+                  :disabled="buttonDisabled"
+                  @click="handleSubmitAndClose"
+                  >{{ buttonText }}</BaseButton
+                >
+              </div>
+            </slot>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped>
 .modal-mask {
   position: fixed;
-  z-index: 999;
   top: 0;
   left: 0;
   width: 100%;
@@ -64,7 +65,6 @@ function handleSubmitAndClose() {
   position: relative;
   max-width: 450px;
   max-height: 90vh;
-  z-index: 11111;
   overflow-y: auto;
   margin: 50px auto;
   padding: 20px 30px;

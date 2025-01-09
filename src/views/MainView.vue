@@ -88,7 +88,7 @@ watch(landmarks, (newLandmarks) => {
     display: grid;
     row-gap: 10px;
     grid-template-columns: none;
-    grid-template-rows: 1fr 2fr;
+    grid-template-rows: 2fr 1fr;
   }
 }
 </style>

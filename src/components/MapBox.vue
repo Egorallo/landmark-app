@@ -138,5 +138,7 @@ watch(
 .map {
   height: 100%;
   border-radius: 8px;
+  position: relative;
+  z-index: 0;
 }
 </style>
