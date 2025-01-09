@@ -20,6 +20,9 @@
   --color-nav-left: #00ffe5;
   --bg-color-lang: #ff7300;
   --border-lang-color: #808080;
+  --button-locale-color: #3e41ff;
+  --button-locale-text-color: #ffffff;
+  --button-locale-color-hover: #2024fb;
 }
 
 html {

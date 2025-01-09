@@ -12,7 +12,6 @@ interface Props {
   landmarksByUserId: Landmark[];
   landmarkMarkers: { id: string; lat: number; lng: number }[];
 }
-
 const props = defineProps<Props>();
 const emits = defineEmits(['zoom-to-landmark']);
 

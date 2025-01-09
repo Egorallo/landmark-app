@@ -5,10 +5,11 @@ import { useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import { getCurrentUser } from '@/services/authService';
 import { generateHexColor } from '@/utils/radnomHexColor';
+import BaseButton from '@/components/BaseButton.vue';
 
 const router = useRouter();
 const userEmail = ref('');
-const pfpColor = ref('');
+const pfpColor = ref('white');
 
 const userPfp = computed(() => (userEmail.value || '').slice(0, 2));
 
@@ -17,10 +18,13 @@ async function handleSignOut() {
   router.push('/sign-in');
 }
 
+function changePfpColor() {
+  pfpColor.value = generateHexColor();
+}
+
 onMounted(async () => {
   const user = await getCurrentUser();
   userEmail.value = user?.email || '';
-  pfpColor.value = generateHexColor();
 });
 </script>
 
@@ -28,22 +32,40 @@ onMounted(async () => {
   <nav class="nav">
     <div class="nav-left">Landmarks 2025 📍</div>
     <div class="nav-right">
-      <select class="nav-right__lang" v-model="$i18n.locale">
-        <option value="en">En</option>
-        <option value="ru">Ru</option>
-      </select>
+      <BaseButton
+        :custom-styles="'custom-btn-locale'"
+        @click="
+          {
+            $i18n.locale === 'en' ? ($i18n.locale = 'ru') : ($i18n.locale = 'en');
+          }
+        "
+        >{{ $i18n.locale.toUpperCase() }}</BaseButton
+      >
       <div class="nav-right__profile-pic flex-center">
-        <div class="nav-right__profile-pic-text">{{ userPfp }}</div>
+        <div class="nav-right__profile-pic-text" @click="changePfpColor">{{ userPfp }}</div>
       </div>
 
       <button class="nav-right__button" @click="handleSignOut">
-        <IconSignOut :color="'var(--color-icon)'" :width="'20px'" :height="'20px'"></IconSignOut>
+        <IconSignOut :color="'var(--color-icon)'" :width="'27px'" :height="'27px'"></IconSignOut>
       </button>
     </div>
   </nav>
 </template>
 
 <style scoped>
+.custom-btn-locale {
+  height: 100%;
+  background-color: var(--button-locale-color);
+  color: var(--button-locale-text-color);
+  font-size: 12;
+  padding: 0 10px;
+  width: 40px;
+}
+
+.custom-btn-locale:hover {
+  background-color: var(--button-locale-color-hover);
+}
+
 .nav {
   display: flex;
   justify-content: space-between;
@@ -59,9 +81,10 @@ onMounted(async () => {
 
 .nav-right {
   display: flex;
-  gap: 10px;
   font-size: 14px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  width: 150px;
 }
 
 .nav-right__lang {
@@ -73,16 +96,18 @@ onMounted(async () => {
 }
 
 .nav-right__profile-pic {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: v-bind(pfpColor);
+  cursor: pointer;
 }
 
 .nav-right__profile-pic-text {
   user-select: none;
   color: var(--button-text-color);
   letter-spacing: 1px;
+  font-size: 16px;
 }
 .nav-right__button {
   background-color: transparent;
