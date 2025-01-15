@@ -1,14 +1,21 @@
-import './assets/main.css'
+import './assets/base.css';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { setupI18n } from '@/i18n';
+import { useLocaleStore } from '@/stores/locale';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import App from './App.vue';
+import router from './router';
 
-import App from './App.vue'
-import router from './router'
+const app = createApp(App);
 
-const app = createApp(App)
+app.use(createPinia());
 
-app.use(createPinia())
-app.use(router)
+const localeStore = useLocaleStore();
 
-app.mount('#app')
+const i18n = setupI18n(localeStore.locale);
+
+app.use(router);
+app.use(i18n);
+
+app.mount('#app');

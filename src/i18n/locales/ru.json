@@ -1,0 +1,52 @@
+{
+  "common": {
+    "name": "Название",
+    "description": "Описание",
+    "button-save": "Сохранить",
+    "button-delete": "Удалить",
+    "button-add": "Добавить место +"
+  },
+  "landmarksList": {
+    "top": "Топ мест",
+    "onlyMyLandmarks": "Показать только мои места",
+    "noLandmarks": "Мест нет."
+  },
+  "landmarksListItem": {
+    "rating": "Оценка"
+  },
+  "landmarkAddModal": {
+    "header": "Добавление нового места",
+    "rating": "Оценка",
+    "imageUpload": "Загрузите ваши изображения",
+    "imagesUploaded": "Файлов загружено:"
+  },
+  "landmarkItemModal": {
+    "rating": "Текущая оценка:",
+    "userRating": "Оценка владельца места:",
+    "edit": "Вы можете редактировать это место потому что вы {role}",
+    "roles": {
+      "admin": "администратор",
+      "owner": "владелец отзыва"
+    },
+    "editRating": "Оценка",
+    "setRating": "На сколько вам понравилось это место:"
+  },
+  "notFound": {
+    "header": "Здесь ничего нет",
+    "link": "Вернуться на главную страницу"
+  },
+  "signForm": {
+    "email": "Email",
+    "emailPlaceholder": "Ваш email",
+    "password": "Пароль",
+    "passwordPlaceholder": "Ваш пароль",
+    "confirm": "Подтвердите пароль",
+    "confirmPlaceholder": "Подтвердите пароль",
+    "dontHave": "Нет аккаунта?",
+    "have": "Есть аккаунт?",
+    "signIn": "Войти",
+    "signUp": "Зарегистрироваться",
+    "signInTitle": "Войдите чтобы использовать наш сервис",
+    "signUpTitle": "Зарегистрируйтесь чтобы использовать наш сервис"
+  }
+}
